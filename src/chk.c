@@ -40,10 +40,8 @@ char *get_data_dir(int verbose)
 
 void chk_all(void)
 {
-  char dir[64];
+  char* dir = get_data_dir(0);
   int errors = 0;
-
-  snprintf(dir, sizeof dir, "%s", get_data_dir(0));
 
   if (dir == NULL) {
     fprintf(stderr, "Unable to find data, aborting.\n");
