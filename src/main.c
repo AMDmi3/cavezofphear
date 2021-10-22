@@ -314,55 +314,55 @@ int mainloop(void) {
 			}
 
 			if (map[p_y][p_x] == MAP_STONE && x_direction == -1 && map[p_y][p_x - 1] == MAP_EMPTY) {
-				if (special[p_y][p_x] == 1) {
+				if (special[p_y][p_x] == SPECIAL_DIAMOND) {
 					special[p_y][p_x] = 0;
 					map[p_y][p_x] = MAP_EMPTY;
 					got_diamond();
-				} else if (special[p_y][p_x] == 2) {
+				} else if (special[p_y][p_x] == SPECIAL_MONEY) {
 					special[p_y][p_x] = 0;
 					map[p_y][p_x] = MAP_EMPTY;
 					got_money();
-				} else if (special[p_y][p_x] == 4) {
+				} else if (special[p_y][p_x] == SPECIAL_BOMBPK) {
 					special[p_y][p_x] = 0;
 					map[p_y][p_x] = MAP_EMPTY;
 					got_bombs();
 				} else {
 					map[p_y][p_x - 1] = MAP_STONE;
-					if (special[p_y][p_x] == 3) {
+					if (special[p_y][p_x] == SPECIAL_BOMB) {
 						special[p_y][p_x] = 0;
-						special[p_y][p_x - 1] = 3;
+						special[p_y][p_x - 1] = SPECIAL_BOMB;
 					}
 				}
 			} else if (map[p_y][p_x] == MAP_STONE && x_direction == +1 && map[p_y][p_x + 1] == MAP_EMPTY) {
-				if (special[p_y][p_x] == 1) {
+				if (special[p_y][p_x] == SPECIAL_DIAMOND) {
 					special[p_y][p_x] = 0;
 					map[p_y][p_x] = MAP_EMPTY;
 					got_diamond();
-				} else if (special[p_y][p_x] == 2) {
+				} else if (special[p_y][p_x] == SPECIAL_MONEY) {
 					special[p_y][p_x] = 0;
 					map[p_y][p_x] = MAP_EMPTY;
 					got_money();
-				} else if (special[p_y][p_x] == 4) {
+				} else if (special[p_y][p_x] == SPECIAL_BOMBPK) {
 					special[p_y][p_x] = 0;
 					map[p_y][p_x] = MAP_EMPTY;
 					got_bombs();
 				} else {
 					map[p_y][p_x + 1] = MAP_STONE;
-					if (special[p_y][p_x] == 3) {
+					if (special[p_y][p_x] == SPECIAL_BOMB) {
 						special[p_y][p_x] = 0;
-						special[p_y][p_x + 1] = 3;
+						special[p_y][p_x + 1] = SPECIAL_BOMB;
 					}
 				}
-			} else if (map[p_y][p_x] == MAP_STONE && (special[p_y][p_x] == 0 || special[p_y][p_x] == 3)) {
+			} else if (map[p_y][p_x] == MAP_STONE && (special[p_y][p_x] == 0 || special[p_y][p_x] == SPECIAL_BOMB)) {
 				p_y = old_p_y;
 				p_x = old_p_x;
-			} else if (map[p_y][p_x] == MAP_STONE && special[p_y][p_x] == 1) {
+			} else if (map[p_y][p_x] == MAP_STONE && special[p_y][p_x] == SPECIAL_DIAMOND) {
 				special[p_y][p_x] = 0;
 				got_diamond();
-			} else if (map[p_y][p_x] == MAP_STONE && special[p_y][p_x] == 2) {
+			} else if (map[p_y][p_x] == MAP_STONE && special[p_y][p_x] == SPECIAL_MONEY) {
 				special[p_y][p_x] = 0;
 				got_money();
-			} else if (map[p_y][p_x] == MAP_STONE && special[p_y][p_x] == 4) {
+			} else if (map[p_y][p_x] == MAP_STONE && special[p_y][p_x] == SPECIAL_BOMBPK) {
 				special[p_y][p_x] = 0;
 				got_bombs();
 			}
@@ -425,16 +425,16 @@ void draw_map(void) {
 			if (map[y][x] == MAP_STONE) {
 				mvaddch(y + 1, x, CHR_STONE);
 			}
-			if (map[y][x] == MAP_STONE && special[y][x] == 1) {
+			if (map[y][x] == MAP_STONE && special[y][x] == SPECIAL_DIAMOND) {
 				mvaddch(y + 1, x, CHR_DIAMOND);
 			}
-			if (map[y][x] == MAP_STONE && special[y][x] == 2) {
+			if (map[y][x] == MAP_STONE && special[y][x] == SPECIAL_MONEY) {
 				mvaddch(y + 1, x, CHR_MONEY);
 			}
-			if (map[y][x] == MAP_STONE && special[y][x] == 3) {
+			if (map[y][x] == MAP_STONE && special[y][x] == SPECIAL_BOMB) {
 				mvaddch(y + 1, x, CHR_BOMB);
 			}
-			if (map[y][x] == MAP_STONE && special[y][x] == 4) {
+			if (map[y][x] == MAP_STONE && special[y][x] == SPECIAL_BOMBPK) {
 				mvaddch(y + 1, x, CHR_BOMBPK);
 			}
 		}
@@ -446,7 +446,7 @@ int update_map(void) {
 
 	for (int y = 0; y < MAP_YSIZE; y++) {
 		for (int x = 0; x < MAP_XSIZE; x++) {
-			if (map[y][x] == MAP_EMPTY && special[y][x] == 3) {
+			if (map[y][x] == MAP_EMPTY && special[y][x] == SPECIAL_BOMB) {
 				map[y][x] = MAP_STONE;
 				return 1;
 			}
@@ -461,21 +461,21 @@ int update_map(void) {
 			if (map[y][x] == MAP_STONE && map[y + 1][x] == MAP_EMPTY) {
 				map[y][x] = MAP_EMPTY;
 				map[y + 1][x] = MAP_STONE;
-				if (special[y][x] == 1) {
+				if (special[y][x] == SPECIAL_DIAMOND) {
 					special[y][x] = 0;
-					special[y + 1][x] = 1;
+					special[y + 1][x] = SPECIAL_DIAMOND;
 				}
-				if (special[y][x] == 2) {
+				if (special[y][x] == SPECIAL_MONEY) {
 					special[y][x] = 0;
-					special[y + 1][x] = 2;
+					special[y + 1][x] = SPECIAL_MONEY;
 				}
-				if (special[y][x] == 3) {
+				if (special[y][x] == SPECIAL_BOMB) {
 					special[y][x] = 0;
-					special[y + 1][x] = 3;
+					special[y + 1][x] = SPECIAL_BOMB;
 				}
-				if (special[y][x] == 4) {
+				if (special[y][x] == SPECIAL_BOMBPK) {
 					special[y][x] = 0;
-					special[y + 1][x] = 4;
+					special[y + 1][x] = SPECIAL_BOMBPK;
 				}
 
 				if (map[y + 1][x] == MAP_STONE && map[y + 2][x] == MAP_PLAYER) {
@@ -490,24 +490,24 @@ int update_map(void) {
 					map[y][x] = MAP_EMPTY;
 					map[y + 1][x - 1] = MAP_STONE;
 
-					if (special[y][x] == 1) {
+					if (special[y][x] == SPECIAL_DIAMOND) {
 						special[y][x] = 0;
-						special[y + 1][x - 1] = 1;
+						special[y + 1][x - 1] = SPECIAL_DIAMOND;
 					}
 
-					if (special[y][x] == 2) {
+					if (special[y][x] == SPECIAL_MONEY) {
 						special[y][x] = 0;
-						special[y + 1][x - 1] = 2;
+						special[y + 1][x - 1] = SPECIAL_MONEY;
 					}
 
-					if (special[y][x] == 3) {
+					if (special[y][x] == SPECIAL_BOMB) {
 						special[y][x] = 0;
-						special[y + 1][x - 1] = 3;
+						special[y + 1][x - 1] = SPECIAL_BOMB;
 					}
 
-					if (special[y][x] == 4) {
+					if (special[y][x] == SPECIAL_BOMBPK) {
 						special[y][x] = 0;
-						special[y + 1][x - 1] = 4;
+						special[y + 1][x - 1] = SPECIAL_BOMBPK;
 					}
 
 					if (map[y + 1][x - 1] == MAP_STONE && map[y + 2][x - 1] == MAP_PLAYER) {
@@ -520,24 +520,24 @@ int update_map(void) {
 					map[y][x] = MAP_EMPTY;
 					map[y + 1][x + 1] = MAP_STONE;
 
-					if (special[y][x] == 1) {
+					if (special[y][x] == SPECIAL_DIAMOND) {
 						special[y][x] = 0;
-						special[y + 1][x + 1] = 1;
+						special[y + 1][x + 1] = SPECIAL_DIAMOND;
 					}
 
-					if (special[y][x] == 2) {
+					if (special[y][x] == SPECIAL_MONEY) {
 						special[y][x] = 0;
-						special[y + 1][x + 1] = 2;
+						special[y + 1][x + 1] = SPECIAL_MONEY;
 					}
 
-					if (special[y][x] == 3) {
+					if (special[y][x] == SPECIAL_BOMB) {
 						special[y][x] = 0;
-						special[y + 1][x + 1] = 3;
+						special[y + 1][x + 1] = SPECIAL_BOMB;
 					}
 
-					if (special[y][x] == 4) {
+					if (special[y][x] == SPECIAL_BOMBPK) {
 						special[y][x] = 0;
-						special[y + 1][x + 1] = 4;
+						special[y + 1][x + 1] = SPECIAL_BOMBPK;
 					}
 
 					if (map[y + 1][x + 1] == MAP_STONE && map[y + 2][x + 1] == MAP_PLAYER) {
@@ -649,7 +649,7 @@ void explode_put(int y, int x, int chr) {
 	if ((x > 1 && MAP_XSIZE - 2 > x) && (y > 1 && MAP_YSIZE - 1> y)) {
 		mvaddch(y, x, chr);
 		map[y][x] = MAP_STONE;
-		special[y][x] = 1;
+		special[y][x] = SPECIAL_DIAMOND;
 	}
 }
 
@@ -658,7 +658,7 @@ int count_diamonds() {
 
 	for (int y = 0; y < MAP_YSIZE; y++) {
 		for (int x = 0; x < MAP_XSIZE; x++) {
-			if (special[y][x] == 1) {
+			if (special[y][x] == SPECIAL_DIAMOND) {
 				num_diamonds++;
 			}
 		}
@@ -736,15 +736,15 @@ void fix_map(void) {
 		for (int x = 0; x < MAP_XSIZE; x++) {
 			if (map[y][x] == MAP_DIAMOND) {
 				map[y][x] = MAP_STONE;
-				special[y][x] = 1;
+				special[y][x] = SPECIAL_DIAMOND;
 			}
 			if (map[y][x] == MAP_MONEY) {
 				map[y][x] = MAP_STONE;
-				special[y][x] = 2;
+				special[y][x] = SPECIAL_MONEY;
 			}
 			if (map[y][x] == MAP_BOMBPK) {
 				map[y][x] = MAP_STONE;
-				special[y][x] = 4;
+				special[y][x] = SPECIAL_BOMBPK;
 			}
 		}
 	}
@@ -822,7 +822,7 @@ void explode_bombs(void) {
 
 	for (int y = 0; y < MAP_YSIZE; y++) {
 		for (int x = 0; x < MAP_XSIZE; x++) {
-			if (map[y][x] == MAP_STONE && special[y][x] == 3) {
+			if (map[y][x] == MAP_STONE && special[y][x] == SPECIAL_BOMB) {
 				_beep();
 				for (int by = y - 1; by < y + 2; by++) {
 					for (int bx = x - 1; bx < x + 2; bx++) {
@@ -830,7 +830,7 @@ void explode_bombs(void) {
 							playerdied = 1;
 						}
 
-						if (map[by][bx] != MAP_WALL && special[by][bx] != 1) {
+						if (map[by][bx] != MAP_WALL && special[by][bx] != SPECIAL_DIAMOND) {
 							map[by][bx] = MAP_EMPTY;
 							special[by][bx] = 0;
 							mvaddch(by + 1, bx, '+');
