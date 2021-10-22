@@ -21,7 +21,7 @@ void make_ready(void);
 
 void curses_start(void);
 void curses_stop(void);
-void bail(char* message);
+void bail(const char* message);
 void sigint_handler();
 void sigwinch_handler();
 
@@ -55,16 +55,16 @@ void editor_draw_status(void);
 void editor_draw_map(void);
 
 int calc_center(int slen);
-int msgbox(char* meesage);
+int msgbox(const char* message);
 int wait_for_input(void);
 
 void splash(void);
-int gplot(char* filename, int x_offset, int y_offset, int ign_space);
+int gplot(const char* filename, int x_offset, int y_offset, int ign_space);
 void gameover(void);
 
 void chk_all(void);
-int chk_file(char* dir, char* filename);
-char* get_data_dir(int verbose);
+int chk_file(const char* dir, const char* filename);
+const char* get_data_dir(int verbose);
 
 
 int count_object(int object);

@@ -22,7 +22,7 @@
 
 void curses_start(void);
 void curses_stop(void);
-void bail(char* message);
+void bail(const char* message);
 void sigint_handler();
 void sigwinch_handler();
 
@@ -61,7 +61,7 @@ void curses_stop(void) {
 }
 
 
-void bail(char* message) {
+void bail(const char* message) {
 	curses_stop();
 	fprintf(stderr, "%s\n", message);
 	exit(EXIT_FAILURE);

@@ -22,12 +22,12 @@
 
 #define VERBOSE 1
 
-char* get_data_dir(int verbose);
+const char* get_data_dir(int verbose);
 void chk_all(void);
-int chk_file(char* dir, char* filename);
+int chk_file(const char* dir, const char* filename);
 
 
-char* get_data_dir(int verbose) {
+const char* get_data_dir(int verbose) {
 	if (verbose) {
 		puts("Looking for data directory:");
 	}
@@ -45,7 +45,7 @@ char* get_data_dir(int verbose) {
 
 
 void chk_all(void) {
-	char* dir = get_data_dir(0);
+	const char* dir = get_data_dir(0);
 	int errors = 0;
 
 	if (dir == NULL) {
@@ -76,7 +76,7 @@ void chk_all(void) {
 	//LOLDEBIAN
 }
 
-int chk_file(char* dir, char* filename) {
+int chk_file(const char* dir, const char* filename) {
 	FILE* fp;
 	char fname[128];
 

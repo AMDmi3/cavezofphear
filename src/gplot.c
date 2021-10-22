@@ -20,9 +20,9 @@
 #include "common.h"
 #include "proto.h"
 
-int gplot(char* filename, int x_offset, int y_offset, int ign_space);
+int gplot(const char* filename, int x_offset, int y_offset, int ign_space);
 
-int gplot(char* filename, int x_offset, int y_offset, int ign_space) {
+int gplot(const char* filename, int x_offset, int y_offset, int ign_space) {
 	FILE* fp;
 	int x, y;
 	int c;

@@ -28,7 +28,7 @@ int calc_center(int slen) {
 }
 
 
-int msgbox(char* message) {
+int msgbox(const char* message) {
 	int len = strlen(message);
 	int x;
 
