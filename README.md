@@ -1,5 +1,5 @@
 <a href="https://repology.org/project/cavezofphear/versions">
-	<img src="https://repology.org/badge/vertical-allrepos/cavezofphear.svg" alt="Packaging status" align="right">
+	<img src="https://repology.org/badge/vertical-allrepos/cavezofphear.svg?exclude_unsupported=1" alt="Packaging status" align="right">
 </a>
 
 [![CI](https://github.com/AMDmi3/cavezofphear/actions/workflows/ci.yml/badge.svg)](https://github.com/AMDmi3/cavezofphear/actions/workflows/ci.yml)
