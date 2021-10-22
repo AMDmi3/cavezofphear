@@ -15,17 +15,12 @@
     see http://www.gnu.org/licenses/.
  */
 
+#include "chk.h"
+
+#include "common.h"
+
 #include <ncurses.h>
 #include <stdlib.h>
-#include "common.h"
-#include "proto.h"
-
-#define VERBOSE 1
-
-const char* get_data_dir(int verbose);
-void chk_all(void);
-int chk_file(const char* dir, const char* filename);
-
 
 const char* get_data_dir(int verbose) {
 	if (verbose) {
@@ -42,7 +37,6 @@ const char* get_data_dir(int verbose) {
 	}
 	return NULL;
 }
-
 
 void chk_all(void) {
 	const char* dir = get_data_dir(0);

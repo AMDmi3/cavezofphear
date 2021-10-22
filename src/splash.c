@@ -15,14 +15,15 @@
     see http://www.gnu.org/licenses/.
  */
 
+#include "splash.h"
+
+#include "common.h"
+#include "misc.h"
+#include "gplot.h"
+
 #include <ncurses.h>
 #include <string.h>
 #include <unistd.h>
-#include "common.h"
-#include "proto.h"
-
-void splash(void);
-void gameover(void);
 
 void splash(void) {
 	int x;
@@ -71,7 +72,6 @@ void splash(void) {
 
 	return;
 }
-
 
 void gameover(void) {
 	fade_dissolv();

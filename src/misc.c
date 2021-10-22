@@ -15,18 +15,17 @@
     see http://www.gnu.org/licenses/.
  */
 
+#include "misc.h"
+#include "common.h"
 
 #include <ncurses.h>
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
-#include "common.h"
-#include "proto.h"
 
 int calc_center(int slen) {
 	return (MAP_XSIZE / 2) - (slen / 2);
 }
-
 
 int msgbox(const char* message) {
 	int len = strlen(message);
@@ -57,12 +56,10 @@ int msgbox(const char* message) {
 	return wait_for_input();
 }
 
-
 int wait_for_input(void) {
 	flushinp();
 	return getch();
 }
-
 
 void fade_dissolv(void) {
 	int i;
@@ -75,7 +72,6 @@ void fade_dissolv(void) {
 	erase();
 	refresh();
 }
-
 
 void mysleep(long nsecs) {
 	struct timespec ts;

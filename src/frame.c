@@ -15,16 +15,11 @@
     see http://www.gnu.org/licenses/.
  */
 
+#include "frame.h"
 
 #include <ncurses.h>
 #include <stdlib.h>
 #include <unistd.h>
-
-void curses_start(void);
-void curses_stop(void);
-void bail(const char* message);
-void sigint_handler();
-void sigwinch_handler();
 
 extern int need_refresh;
 
@@ -51,7 +46,6 @@ void curses_start(void) {
 	flushinp();
 }
 
-
 void curses_stop(void) {
 	erase();
 	refresh();
@@ -60,19 +54,16 @@ void curses_stop(void) {
 	endwin();
 }
 
-
 void bail(const char* message) {
 	curses_stop();
 	fprintf(stderr, "%s\n", message);
 	exit(EXIT_FAILURE);
 }
 
-
 void sigint_handler() {
 	curses_stop();
 	bail("got SIGINT, cleaning up");
 }
-
 
 void sigwinch_handler() {
 	/*
@@ -86,4 +77,3 @@ void sigwinch_handler() {
 	curses_start();
 	return;
 }
-

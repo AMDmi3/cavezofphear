@@ -15,6 +15,8 @@
     see http://www.gnu.org/licenses/.
  */
 
+#ifndef COMMON_H
+#define COMMON_H
 
 #ifndef VERSION
 #error VERSION is expected to be defied by the build system
@@ -56,3 +58,4 @@
 #define EX_C CHR_DIAMOND
 #define EX_DELAY 50000
 
+#endif

@@ -13,8 +13,15 @@ include(GNUInstallDirs)
 
 # sources
 set(PHEAR_HEADERS
+	src/chk.h
 	src/common.h
-	src/proto.h
+	src/editor.h
+	src/frame.h
+	src/gplot.h
+	src/isready.h
+	src/loadmap.h
+	src/misc.h
+	src/splash.h
 )
 
 set(PHEAR_SOURCES

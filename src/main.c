@@ -15,6 +15,14 @@
     see http://www.gnu.org/licenses/.
  */
 
+#include "chk.h"
+#include "common.h"
+#include "editor.h"
+#include "frame.h"
+#include "isready.h"
+#include "loadmap.h"
+#include "misc.h"
+#include "splash.h"
 
 #include <ncurses.h>
 #include <string.h>
@@ -23,8 +31,6 @@
 #include <signal.h>
 #include <time.h>
 #include <ctype.h>
-#include "common.h"
-#include "proto.h"
 
 #define UPDATE_DELAY 2000000
 
@@ -43,6 +49,27 @@ int custom_map;
 int need_refresh;
 int option_sound;
 int first_bomb;
+
+void make_ready(void);
+int mainloop(void);
+void draw_map(void);
+int update_map(void);
+void create_map(char* mapname);
+void player_died(void);
+void explode(int x, int y, int len, int chr);
+void explode_put(int y, int x, int chr);
+int count_diamonds();
+int count_monsters();
+void got_diamond();
+void got_money();
+void got_bombs();
+void got_extralife();
+void fix_map(void);
+void level_done(int x, int y);
+void draw_status(void);
+void _beep(void);
+void explode_bombs(void);
+int do_the_monster_dance(void);
 
 int main(int argc, char** argv) {
 	int c;
@@ -98,7 +125,6 @@ int main(int argc, char** argv) {
 
 	return EXIT_SUCCESS;
 }
-
 
 void make_ready(void) {
 	level = 1;
@@ -386,7 +412,6 @@ int mainloop(void) {
 	return EXIT_SUCCESS;
 }
 
-
 void draw_map(void) {
 	int x, y;
 
@@ -427,7 +452,6 @@ void draw_map(void) {
 		}
 	}
 }
-
 
 int update_map(void) {
 	int x, y;
@@ -542,7 +566,6 @@ int update_map(void) {
 	return changes;
 }
 
-
 void create_map(char* mapname) {
 	int y, x;
 	char mstr[64];
@@ -567,7 +590,6 @@ void create_map(char* mapname) {
 	while (update_map() != 0) {
 	}
 }
-
 
 void player_died(void) {
 	int rval;
@@ -618,7 +640,6 @@ void player_died(void) {
 	}
 }
 
-
 void explode(int x, int y, int len, int chr) {
 	int offset;
 
@@ -643,7 +664,6 @@ void explode(int x, int y, int len, int chr) {
 	}
 }
 
-
 void explode_put(int y, int x, int chr) {
 	if ((x > 1 && MAP_XSIZE - 2 > x) && (y > 1 && MAP_YSIZE - 1> y)) {
 		mvaddch(y, x, chr);
@@ -651,7 +671,6 @@ void explode_put(int y, int x, int chr) {
 		special[y][x] = 1;
 	}
 }
-
 
 int count_diamonds() {
 	int x, y;
@@ -683,7 +702,6 @@ int count_monsters() {
 	return num_monsters;
 }
 
-
 void got_diamond() {
 	_beep();
 	diamonds_left--;
@@ -692,7 +710,6 @@ void got_diamond() {
 		got_extralife();
 	}
 }
-
 
 void got_money() {
 	_beep();
@@ -722,7 +739,6 @@ void got_bombs() {
 	}
 }
 
-
 void got_extralife() {
 	int i;
 
@@ -737,7 +753,6 @@ void got_extralife() {
 		draw_status();
 	}
 }
-
 
 void fix_map(void) {
 	int x, y;
@@ -759,7 +774,6 @@ void fix_map(void) {
 		}
 	}
 }
-
 
 void level_done(int x, int y) {
 	// int i;
@@ -789,7 +803,6 @@ void level_done(int x, int y) {
 	level++;
 	mainloop();
 }
-
 
 void draw_status(void) {
 	attrset(COLOR_PAIR(COLOR_GREEN));
@@ -864,7 +877,6 @@ void explode_bombs(void) {
 
 	return;
 }
-
 
 int do_the_monster_dance(void) {
 	int x, y, r, d, moved;

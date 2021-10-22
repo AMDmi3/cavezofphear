@@ -15,19 +15,28 @@
     see http://www.gnu.org/licenses/.
  */
 
+#include "editor.h"
+
+#include "common.h"
+#include "frame.h"
+#include "loadmap.h"
+#include "misc.h"
+
 #include <ncurses.h>
 #include <stdlib.h>
 #include <signal.h>
 #include <string.h>
 #include <unistd.h>
 #include <ctype.h>
-#include "common.h"
-#include "proto.h"
 
 extern char map[MAP_YSIZE][MAP_XSIZE];
 int lock;
 int last_obj;
 
+void editor_draw_map(void);
+int save_map(char* filename);
+int count_object(int object);
+void editor_draw_status(void);
 
 int editor_main(char* file) {
 	FILE* fp;
@@ -237,7 +246,6 @@ int editor_main(char* file) {
 	return EXIT_SUCCESS;
 }
 
-
 void editor_draw_map(void) {
 	int x, y;
 
@@ -274,7 +282,6 @@ void editor_draw_map(void) {
 	}
 }
 
-
 int save_map(char* filename) {
 	int x, y;
 	FILE* fp;
@@ -302,7 +309,6 @@ int save_map(char* filename) {
 	return 0;
 }
 
-
 int count_object(int object) {
 	int x, y;
 	int rval = 0;
@@ -317,7 +323,6 @@ int count_object(int object) {
 
 	return rval;
 }
-
 
 void editor_draw_status(void) {
 	attrset(COLOR_PAIR(COLOR_GREEN));

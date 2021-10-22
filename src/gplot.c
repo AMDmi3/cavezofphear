@@ -15,12 +15,12 @@
     see http://www.gnu.org/licenses/.
  */
 
+#include "gplot.h"
+
+#include "chk.h"
+#include "common.h"
 
 #include <ncurses.h>
-#include "common.h"
-#include "proto.h"
-
-int gplot(const char* filename, int x_offset, int y_offset, int ign_space);
 
 int gplot(const char* filename, int x_offset, int y_offset, int ign_space) {
 	FILE* fp;
