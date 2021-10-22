@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 # meta
-project(cavezofphear VERSION 0.5.1)
+project(cavezofphear VERSION 0.5.2)
 
 # options
 OPTION(SYSTEMWIDE "Build for systemwide installation" OFF)
