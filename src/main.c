@@ -36,7 +36,7 @@
 
 char map[MAP_YSIZE][MAP_XSIZE];
 char special[MAP_YSIZE][MAP_XSIZE];
-char current_map[128];
+char current_map[1024];
 int p_x;
 int p_y;
 int diamonds_left;

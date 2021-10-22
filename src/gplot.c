@@ -26,7 +26,7 @@ int gplot(const char* filename, int x_offset, int y_offset, int ign_space) {
 	FILE* fp;
 	int x, y;
 	int c;
-	char fname[128];
+	char fname[1024];
 
 	snprintf(fname, sizeof fname, "%s%s", get_data_dir(), filename);
 
