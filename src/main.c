@@ -793,7 +793,7 @@ void level_done(int x, int y) {
 
 void draw_status(void) {
 	attrset(COLOR_PAIR(COLOR_GREEN));
-	mvprintw(0, calc_center(strlen("CAVEZ of PHEAR ("VERSION ")")), "CAVEZ of PHEAR ("VERSION ")");
+	mvprintw(0, calc_center(strlen("CAVEZ of PHEAR (" VERSION ")")), "CAVEZ of PHEAR (" VERSION ")");
 
 	attrset(COLOR_PAIR(COLOR_MAGENTA) | A_BOLD);
 	mvprintw(0, 0, "DIAMONDS LEFT:");
