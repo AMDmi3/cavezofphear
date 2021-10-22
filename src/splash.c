@@ -45,7 +45,7 @@ void splash(void)
 
   attrset(COLOR_PAIR(COLOR_MAGENTA));
 
-  mvprintw(MAP_YSIZE, 0, "CAVEZ of PHEAR Copyright 2003-2007 Tom Rune Flo <tom@x86.no>");
+  mvprintw(MAP_YSIZE, 0, "CAVEZ of PHEAR Copyright 2003-2011 Tom Rune Flo <tom@x86.no>");
   mvprintw(MAP_YSIZE + 1, 0, "Distributed under the terms of the GPL license");
 
   refresh();
