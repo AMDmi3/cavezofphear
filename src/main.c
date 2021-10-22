@@ -578,7 +578,7 @@ void create_map(char* mapname) {
 	}
 
 	if (mapname[0] == 0x00) {
-		snprintf(mstr, sizeof mstr - 1, "%s/levels/%02d", get_data_dir(0), level);
+		snprintf(mstr, sizeof mstr - 1, "%s/levels/%02d", get_data_dir(), level);
 	} else {
 		snprintf(mstr, sizeof mstr - 1, "%s", mapname);
 	}

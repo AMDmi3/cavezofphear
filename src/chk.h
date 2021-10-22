@@ -18,7 +18,7 @@
 #ifndef CHK_H
 #define CHK_H
 
-const char* get_data_dir(int verbose);
+const char* get_data_dir();
 void chk_all(void);
 int chk_file(const char* dir, const char* filename);
 

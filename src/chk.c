@@ -22,24 +22,15 @@
 #include <ncurses.h>
 #include <stdlib.h>
 
-const char* get_data_dir(int verbose) {
-	if (verbose) {
-		puts("Looking for data directory:");
-	}
-	if (verbose) {
-		puts(DATADIR "/data/" " ..");
-	}
+const char* get_data_dir() {
 	if (!chk_file(DATADIR "/data/", "spgraf")) {
 		return DATADIR "/data/";
-	}
-	if (verbose) {
-		puts("Data not found");
 	}
 	return NULL;
 }
 
 void chk_all(void) {
-	const char* dir = get_data_dir(0);
+	const char* dir = get_data_dir();
 	int errors = 0;
 
 	if (dir == NULL) {
