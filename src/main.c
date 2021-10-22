@@ -624,14 +624,12 @@ void player_died(void) {
 }
 
 void explode(int x, int y, int len, int chr) {
-	int offset;
-
 	explode_put(y, x, chr);
 	map[y][x] = MAP_EMPTY;
 
 	refresh();
 
-	for (offset = 0; offset < len; offset++) {
+	for (int offset = 0; offset < len; offset++) {
 		explode_put(y + offset, x, chr);
 		explode_put(y - offset, x, chr);
 		explode_put(y, x + offset * 2, chr);
@@ -656,11 +654,10 @@ void explode_put(int y, int x, int chr) {
 }
 
 int count_diamonds() {
-	int x, y;
 	int num_diamonds = 0;
 
-	for (y = 0; y < MAP_YSIZE; y++) {
-		for (x = 0; x < MAP_XSIZE; x++) {
+	for (int y = 0; y < MAP_YSIZE; y++) {
+		for (int x = 0; x < MAP_XSIZE; x++) {
 			if (special[y][x] == 1) {
 				num_diamonds++;
 			}
@@ -671,11 +668,10 @@ int count_diamonds() {
 }
 
 int count_monsters() {
-	int x, y;
 	int num_monsters = 0;
 
-	for (y = 0; y < MAP_YSIZE; y++) {
-		for (x = 0; x < MAP_XSIZE; x++) {
+	for (int y = 0; y < MAP_YSIZE; y++) {
+		for (int x = 0; x < MAP_XSIZE; x++) {
 			if (map[y][x] == MAP_MONSTER) {
 				num_monsters++;
 			}
@@ -723,10 +719,8 @@ void got_bombs() {
 }
 
 void got_extralife() {
-	int i;
-
 	if (lives < 99) {
-		for (i = 0; i < 6; i++) {
+		for (int i = 0; i < 6; i++) {
 			_beep();
 			mysleep(1);
 		}
@@ -738,10 +732,8 @@ void got_extralife() {
 }
 
 void fix_map(void) {
-	int x, y;
-
-	for (y = 0; y < MAP_YSIZE; y++) {
-		for (x = 0; x < MAP_XSIZE; x++) {
+	for (int y = 0; y < MAP_YSIZE; y++) {
+		for (int x = 0; x < MAP_XSIZE; x++) {
 			if (map[y][x] == MAP_DIAMOND) {
 				map[y][x] = MAP_STONE;
 				special[y][x] = 1;
@@ -826,16 +818,14 @@ void _beep(void) {
 }
 
 void explode_bombs(void) {
-	int x, y;
-	int bx, by;
 	int playerdied = 0;
 
-	for (y = 0; y < MAP_YSIZE; y++) {
-		for (x = 0; x < MAP_XSIZE; x++) {
+	for (int y = 0; y < MAP_YSIZE; y++) {
+		for (int x = 0; x < MAP_XSIZE; x++) {
 			if (map[y][x] == MAP_STONE && special[y][x] == 3) {
 				_beep();
-				for (by = y - 1; by < y + 2; by++) {
-					for (bx = x - 1; bx < x + 2; bx++) {
+				for (int by = y - 1; by < y + 2; by++) {
+					for (int bx = x - 1; bx < x + 2; bx++) {
 						if (map[by][bx] == MAP_PLAYER) {
 							playerdied = 1;
 						}
@@ -862,13 +852,11 @@ void explode_bombs(void) {
 }
 
 int do_the_monster_dance(void) {
-	int x, y, r, d, moved;
+	const int d = rand() % 3;
 
-	d = rand() % 3;
-
-	for (y = 0; y < MAP_YSIZE; y++) {
-		for (x = 0; x < MAP_XSIZE; x++) {
-			moved = 0;
+	for (int y = 0; y < MAP_YSIZE; y++) {
+		for (int x = 0; x < MAP_XSIZE; x++) {
+			int moved = 0;
 			if (map[y][x] == MAP_MONSTER) {
 				if (d == 0 || d == 1) {
 					if (p_y > y && (map[y + 1][x] == MAP_EMPTY || map[y + 1][x] == MAP_PLAYER)) {
@@ -899,8 +887,7 @@ int do_the_monster_dance(void) {
 				}
 
 				if (moved == 0) {
-					r = rand() % 4;
-					switch (r) {
+					switch (rand() % 4) {
 					case 0:
 						if (map[y][x - 1] == MAP_EMPTY || map[y][x - 1] == MAP_PLAYER) {
 							map[y][x] = MAP_EMPTY;
