@@ -16,7 +16,9 @@
 */
 
 
-#define VERSION "0.5.1"
+#ifndef VERSION
+#error VERSION is expected to be defied by the build system
+#endif
 
 #define MAP_XSIZE 80
 #define MAP_YSIZE 23

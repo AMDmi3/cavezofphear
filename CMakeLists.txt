@@ -30,6 +30,7 @@ set(PHEAR_SOURCES
 add_executable(phear ${PHEAR_HEADERS} ${PHEAR_SOURCES})
 target_link_libraries(phear ${CURSES_LIBRARIES})
 target_include_directories(phear SYSTEM PRIVATE ${CURSES_INCLUDE_DIRS})
+target_compile_definitions(phear PRIVATE -DVERSION="${CMAKE_PROJECT_VERSION}")
 
 if(NOT MSVC)
 	target_compile_options(phear PRIVATE -Wall -Wextra -pedantic)
