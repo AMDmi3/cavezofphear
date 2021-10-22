@@ -25,10 +25,20 @@ fight back, drop stones on them or blow them up using your bombs.
 Pressing *s* will enable/disable sound, *w* will highlight your
 current position.
 
-## Installation
+## Building and installation
+
+To run the game without installing:
 
 ```sh
 cmake .
+make
+./phear
+```
+
+For systemwide installation:
+
+```sh
+cmake -DSYSTEMWIDE=ON .
 make
 make install
 ```

@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 3.10)
 # meta
 project(cavezofphear VERSION 0.5.1)
 
+# options
+OPTION(SYSTEMWIDE "Build for systemwide installation" OFF)
+
 # depends
 find_package(Curses REQUIRED)
 
@@ -36,6 +39,14 @@ if(NOT MSVC)
 	target_compile_options(phear PRIVATE -Wall -Wextra -pedantic)
 endif()
 
+if(SYSTEMWIDE)
+	target_compile_definitions(phear PRIVATE -DDATADIR="${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATADIR}/phear")
+else()
+	target_compile_definitions(phear PRIVATE -DDATADIR="${PROJECT_SOURCE_DIR}")
+endif()
+
 # install
-install(TARGETS phear RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
-install(DIRECTORY data DESTINATION ${CMAKE_INSTALL_DATADIR}/phear)
+if(SYSTEMWIDE)
+	install(TARGETS phear RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+	install(DIRECTORY data DESTINATION ${CMAKE_INSTALL_DATADIR}/phear)
+endif()

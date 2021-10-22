@@ -30,15 +30,9 @@ int chk_file(char *dir, char *filename);
 char *get_data_dir(int verbose)
 {
   if (verbose) puts("Looking for data directory:");
-  if (verbose) puts("./data/ ..");
-  if (!chk_file("./data/", "spgraf"))
-    return "./data/";
-  if (verbose) puts("/usr/local/share/phear/data/ ..");
-  if (!chk_file("/usr/local/share/phear/data/", "spgraf"))
-    return "/usr/local/share/phear/data/";
-  if (verbose) puts("/usr/share/phear/data/ ..");
-  if (!chk_file("/usr/share/phear/data/", "spgraf"))
-    return "/usr/share/phear/data/";
+  if (verbose) puts(DATADIR "/data/" " ..");
+  if (!chk_file(DATADIR "/data/", "spgraf"))
+    return DATADIR "/data/";
   if (verbose) puts("Data not found");
   return NULL;
 }
