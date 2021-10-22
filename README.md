@@ -7,6 +7,8 @@
 
 # CAVEZ of PHEAR
 
+![CAVEZ of PHEAR screenshot](doc/screenshot.png)
+
 You are trapped in the CAVEZ of PHEAR, your mission is to escape
 through all the caves and make it out alive. To escape through a
 cave you will have to find all the diamonds located in it. Once
