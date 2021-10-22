@@ -19,7 +19,7 @@
 
 #include "common.h"
 
-#include <ncurses.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 const char* get_data_dir() {

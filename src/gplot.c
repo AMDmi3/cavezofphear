@@ -20,6 +20,7 @@
 #include "chk.h"
 #include "common.h"
 
+#include <stdio.h>
 #include <ncurses.h>
 
 int gplot(const char* filename, int x_offset, int y_offset, int ign_space) {

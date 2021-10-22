@@ -17,12 +17,8 @@
 
 #include "isready.h"
 
-#include <stdio.h>
 #include <sys/select.h>
-#include <sys/time.h>
-#include <inttypes.h>
-#include <sys/types.h>
-#include <string.h>
+#include <stddef.h>
 
 int isready(int fd) {
 	int rc;

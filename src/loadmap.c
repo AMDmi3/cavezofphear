@@ -19,7 +19,7 @@
 
 #include "common.h"
 
-#include <ncurses.h>
+#include <stdio.h>
 
 int load_map(const char* filename, char map[MAP_YSIZE][MAP_XSIZE]) {
 	int x, y;
