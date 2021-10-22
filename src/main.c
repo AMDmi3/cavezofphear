@@ -35,7 +35,7 @@
 #define UPDATE_DELAY 2000000
 
 char map[MAP_YSIZE][MAP_XSIZE];
-char special[MAP_YSIZE][MAP_XSIZE];
+char item_behind_player;
 char current_map[1024];
 int p_x;
 int p_y;
@@ -64,7 +64,6 @@ void got_diamond();
 void got_money();
 void got_bombs();
 void got_extralife();
-void fix_map(void);
 void level_done(int x, int y);
 void draw_status(void);
 void _beep(void);
@@ -136,25 +135,39 @@ void make_ready(void) {
 	need_refresh = 0;
 }
 
+int is_stonish(char type) {
+	// checks item for stone-like behavior, e.g. an item
+	// which may fall down and roll down stonish slopes
+	return type == MAP_STONE ||
+		   type == MAP_DIAMOND ||
+		   type == MAP_MONEY ||
+		   type == MAP_BOMB ||
+		   type == MAP_BOMBPK;
+}
+
 int mainloop(void) {
 	erase();
 
 	create_map(current_map);
-	fix_map();
 
 	p_x = 1;
 	p_y = 1;
 
+	int num_players = 0;
 	for (int y = 0; y < MAP_YSIZE; y++) {
 		for (int x = 0; x < MAP_XSIZE; x++) {
 			if (map[y][x] == MAP_PLAYER) {
-				p_x = x;
-				p_y = y;
+				if (!num_players++) {  // only consider first player location
+					p_x = x;
+					p_y = y;
+				}
+				map[p_y][p_x] = MAP_EMPTY;
 			}
 		}
 	}
 
 	map[p_y][p_x] = MAP_PLAYER;
+	item_behind_player = MAP_EMPTY;
 
 	diamonds_left = count_diamonds();
 
@@ -211,21 +224,21 @@ int mainloop(void) {
 			flushinp();
 
 			if (tolower(input) == 'b') {
-				if (bombs > 0 && special[p_y][p_x] != SPECIAL_BOMB) {
+				if (bombs > 0 && item_behind_player != MAP_BOMB) {
 					bombs--;
 
 					if (map[p_y + 1][p_x] == MAP_EMPTY) {
-						map[p_y + 1][p_x] = MAP_STONE;
-						special[p_y + 1][p_x] = SPECIAL_BOMB;
-					} else if (map[p_y + 1][p_x] == MAP_STONE && map[p_y + 1][p_x + 1] == MAP_EMPTY && map[p_y][p_x + 1] == MAP_EMPTY) {
-						map[p_y + 1][p_x + 1] = MAP_STONE;
-						special[p_y + 1][p_x + 1] = SPECIAL_BOMB;
-					} else if (map[p_y + 1][p_x] == MAP_STONE && map[p_y + 1][p_x - 1] == MAP_EMPTY && map[p_y][p_x - 1] == MAP_EMPTY) {
-						map[p_y + 1][p_x - 1] = MAP_STONE;
-						special[p_y + 1][p_x - 1] = SPECIAL_BOMB;
+						// bomb falls down
+						map[p_y + 1][p_x] = MAP_BOMB;
+					} else if (is_stonish(map[p_y + 1][p_x]) && map[p_y + 1][p_x + 1] == MAP_EMPTY && map[p_y][p_x + 1] == MAP_EMPTY) {
+						// bomb rolls right
+						map[p_y + 1][p_x + 1] = MAP_BOMB;
+					} else if (is_stonish(map[p_y + 1][p_x]) && map[p_y + 1][p_x - 1] == MAP_EMPTY && map[p_y][p_x - 1] == MAP_EMPTY) {
+						// bomb rolls left
+						map[p_y + 1][p_x - 1] = MAP_BOMB;
 					} else {
-						map[p_y][p_x] = MAP_STONE;
-						special[p_y][p_x] = SPECIAL_BOMB;
+						// bomb is placed at player location
+						item_behind_player = MAP_BOMB;
 					}
 					need_refresh = 1;
 				}
@@ -249,8 +262,7 @@ int mainloop(void) {
 			}
 
 			if (tolower(input) == 'k') {
-				map[p_y][p_x] = MAP_STONE;
-				special[p_y][p_x] = SPECIAL_DIAMOND;
+				map[p_y][p_x] = MAP_DIAMOND;
 				player_died();
 			}
 
@@ -283,7 +295,9 @@ int mainloop(void) {
 				refresh();
 			}
 
-			map[p_y][p_x] = 0;
+			// move player
+			map[p_y][p_x] = item_behind_player;
+			int player_moved = 1;
 			int old_p_y = p_y;
 			int old_p_x = p_x;
 
@@ -313,61 +327,44 @@ int mainloop(void) {
 				player_died();
 			}
 
-			if (map[p_y][p_x] == MAP_STONE && x_direction == -1 && map[p_y][p_x - 1] == MAP_EMPTY) {
-				if (special[p_y][p_x] == SPECIAL_DIAMOND) {
-					special[p_y][p_x] = 0;
-					map[p_y][p_x] = MAP_EMPTY;
+			if (is_stonish(map[p_y][p_x]) && x_direction == -1 && map[p_y][p_x - 1] == MAP_EMPTY) {
+				// try to push left
+				if (map[p_y][p_x] == MAP_DIAMOND) {
 					got_diamond();
-				} else if (special[p_y][p_x] == SPECIAL_MONEY) {
-					special[p_y][p_x] = 0;
-					map[p_y][p_x] = MAP_EMPTY;
+				} else if (map[p_y][p_x] == MAP_MONEY) {
 					got_money();
-				} else if (special[p_y][p_x] == SPECIAL_BOMBPK) {
-					special[p_y][p_x] = 0;
-					map[p_y][p_x] = MAP_EMPTY;
+				} else if (map[p_y][p_x] == MAP_BOMBPK) {
+					got_bombs();
+				} else { // STONE or BOMB
+					map[p_y][p_x - 1] = map[p_y][p_x];
+				}
+			} else if (is_stonish(map[p_y][p_x]) && x_direction == +1 && map[p_y][p_x + 1] == MAP_EMPTY) {
+				// try to push right
+				if (map[p_y][p_x] == MAP_DIAMOND) {
+					got_diamond();
+				} else if (map[p_y][p_x] == MAP_MONEY) {
+					got_money();
+				} else if (map[p_y][p_x] == MAP_BOMBPK) {
 					got_bombs();
 				} else {
-					map[p_y][p_x - 1] = MAP_STONE;
-					if (special[p_y][p_x] == SPECIAL_BOMB) {
-						special[p_y][p_x] = 0;
-						special[p_y][p_x - 1] = SPECIAL_BOMB;
-					}
+					map[p_y][p_x + 1] = map[p_y][p_x];
 				}
-			} else if (map[p_y][p_x] == MAP_STONE && x_direction == +1 && map[p_y][p_x + 1] == MAP_EMPTY) {
-				if (special[p_y][p_x] == SPECIAL_DIAMOND) {
-					special[p_y][p_x] = 0;
-					map[p_y][p_x] = MAP_EMPTY;
-					got_diamond();
-				} else if (special[p_y][p_x] == SPECIAL_MONEY) {
-					special[p_y][p_x] = 0;
-					map[p_y][p_x] = MAP_EMPTY;
-					got_money();
-				} else if (special[p_y][p_x] == SPECIAL_BOMBPK) {
-					special[p_y][p_x] = 0;
-					map[p_y][p_x] = MAP_EMPTY;
-					got_bombs();
-				} else {
-					map[p_y][p_x + 1] = MAP_STONE;
-					if (special[p_y][p_x] == SPECIAL_BOMB) {
-						special[p_y][p_x] = 0;
-						special[p_y][p_x + 1] = SPECIAL_BOMB;
-					}
-				}
-			} else if (map[p_y][p_x] == MAP_STONE && (special[p_y][p_x] == 0 || special[p_y][p_x] == SPECIAL_BOMB)) {
+			} else if (map[p_y][p_x] == MAP_STONE || map[p_y][p_x] == MAP_BOMB) {
+				// blocked
+				player_moved = 0;
 				p_y = old_p_y;
 				p_x = old_p_x;
-			} else if (map[p_y][p_x] == MAP_STONE && special[p_y][p_x] == SPECIAL_DIAMOND) {
-				special[p_y][p_x] = 0;
+			} else if (map[p_y][p_x] == MAP_DIAMOND) {
 				got_diamond();
-			} else if (map[p_y][p_x] == MAP_STONE && special[p_y][p_x] == SPECIAL_MONEY) {
-				special[p_y][p_x] = 0;
+			} else if (map[p_y][p_x] == MAP_MONEY) {
 				got_money();
-			} else if (map[p_y][p_x] == MAP_STONE && special[p_y][p_x] == SPECIAL_BOMBPK) {
-				special[p_y][p_x] = 0;
+			} else if (map[p_y][p_x] == MAP_BOMBPK) {
 				got_bombs();
 			}
 
-
+			if (player_moved) {
+				item_behind_player = MAP_EMPTY;
+			}
 			map[p_y][p_x] = MAP_PLAYER;
 
 			int update_delay = UPDATE_DELAY;
@@ -417,24 +414,22 @@ void draw_map(void) {
 			if (map[y][x] == MAP_PLAYER) {
 				mvaddch(y + 1, x, CHR_PLAYER);
 			}
-
 			if (map[y][x] == MAP_MONSTER) {
 				mvaddch(y + 1, x, CHR_MONSTER);
 			}
-
 			if (map[y][x] == MAP_STONE) {
 				mvaddch(y + 1, x, CHR_STONE);
 			}
-			if (map[y][x] == MAP_STONE && special[y][x] == SPECIAL_DIAMOND) {
+			if (map[y][x] == MAP_DIAMOND) {
 				mvaddch(y + 1, x, CHR_DIAMOND);
 			}
-			if (map[y][x] == MAP_STONE && special[y][x] == SPECIAL_MONEY) {
+			if (map[y][x] == MAP_MONEY) {
 				mvaddch(y + 1, x, CHR_MONEY);
 			}
-			if (map[y][x] == MAP_STONE && special[y][x] == SPECIAL_BOMB) {
+			if (map[y][x] == MAP_BOMB) {
 				mvaddch(y + 1, x, CHR_BOMB);
 			}
-			if (map[y][x] == MAP_STONE && special[y][x] == SPECIAL_BOMBPK) {
+			if (map[y][x] == MAP_BOMBPK) {
 				mvaddch(y + 1, x, CHR_BOMBPK);
 			}
 		}
@@ -446,101 +441,44 @@ int update_map(void) {
 
 	for (int y = 0; y < MAP_YSIZE; y++) {
 		for (int x = 0; x < MAP_XSIZE; x++) {
-			if (map[y][x] == MAP_EMPTY && special[y][x] == SPECIAL_BOMB) {
-				map[y][x] = MAP_STONE;
-				return 1;
-			}
-
-			if (map[y][x] == MAP_STONE && map[y + 1][x] == MAP_MONSTER) {
+			// falling things crush monsters
+			if (is_stonish(map[y][x]) && map[y + 1][x] == MAP_MONSTER) {
 				map[y + 1][x] = MAP_EMPTY;
-				special[y + 1][x] = 0;
 				_beep();
 				return 1;
 			}
 
-			if (map[y][x] == MAP_STONE && map[y + 1][x] == MAP_EMPTY) {
+			// things fall down
+			if (is_stonish(map[y][x]) && map[y + 1][x] == MAP_EMPTY) {
+				map[y + 1][x] = map[y][x];
 				map[y][x] = MAP_EMPTY;
-				map[y + 1][x] = MAP_STONE;
-				if (special[y][x] == SPECIAL_DIAMOND) {
-					special[y][x] = 0;
-					special[y + 1][x] = SPECIAL_DIAMOND;
-				}
-				if (special[y][x] == SPECIAL_MONEY) {
-					special[y][x] = 0;
-					special[y + 1][x] = SPECIAL_MONEY;
-				}
-				if (special[y][x] == SPECIAL_BOMB) {
-					special[y][x] = 0;
-					special[y + 1][x] = SPECIAL_BOMB;
-				}
-				if (special[y][x] == SPECIAL_BOMBPK) {
-					special[y][x] = 0;
-					special[y + 1][x] = SPECIAL_BOMBPK;
-				}
 
-				if (map[y + 1][x] == MAP_STONE && map[y + 2][x] == MAP_PLAYER) {
+				if (is_stonish(map[y + 1][x]) && map[y + 2][x] == MAP_PLAYER) {
 					player_died();
 				}
 
 				return 1;
 			}
 
-			if (map[y][x] == MAP_STONE && map[y + 1][x] == MAP_STONE && map[y + 2][x] != MAP_EMPTY) {
+			if (is_stonish(map[y][x]) && is_stonish(map[y + 1][x]) && map[y + 2][x] != MAP_EMPTY) {
+				// things roll left
 				if (map[y][x - 1] == MAP_EMPTY && map[y + 1][x - 1] == MAP_EMPTY) {
+					map[y + 1][x - 1] = map[y][x];
 					map[y][x] = MAP_EMPTY;
-					map[y + 1][x - 1] = MAP_STONE;
 
-					if (special[y][x] == SPECIAL_DIAMOND) {
-						special[y][x] = 0;
-						special[y + 1][x - 1] = SPECIAL_DIAMOND;
-					}
-
-					if (special[y][x] == SPECIAL_MONEY) {
-						special[y][x] = 0;
-						special[y + 1][x - 1] = SPECIAL_MONEY;
-					}
-
-					if (special[y][x] == SPECIAL_BOMB) {
-						special[y][x] = 0;
-						special[y + 1][x - 1] = SPECIAL_BOMB;
-					}
-
-					if (special[y][x] == SPECIAL_BOMBPK) {
-						special[y][x] = 0;
-						special[y + 1][x - 1] = SPECIAL_BOMBPK;
-					}
-
-					if (map[y + 1][x - 1] == MAP_STONE && map[y + 2][x - 1] == MAP_PLAYER) {
+					if (is_stonish(map[y + 1][x - 1]) && map[y + 2][x - 1] == MAP_PLAYER) {
 						player_died();
 					}
 
 					return 1;
 				}
+
+				// things roll right
 				if (map[y][x + 1] == MAP_EMPTY && map[y + 1][x + 1] == MAP_EMPTY) {
+					map[y + 1][x + 1] = map[y][x];
 					map[y][x] = MAP_EMPTY;
-					map[y + 1][x + 1] = MAP_STONE;
 
-					if (special[y][x] == SPECIAL_DIAMOND) {
-						special[y][x] = 0;
-						special[y + 1][x + 1] = SPECIAL_DIAMOND;
-					}
-
-					if (special[y][x] == SPECIAL_MONEY) {
-						special[y][x] = 0;
-						special[y + 1][x + 1] = SPECIAL_MONEY;
-					}
-
-					if (special[y][x] == SPECIAL_BOMB) {
-						special[y][x] = 0;
-						special[y + 1][x + 1] = SPECIAL_BOMB;
-					}
-
-					if (special[y][x] == SPECIAL_BOMBPK) {
-						special[y][x] = 0;
-						special[y + 1][x + 1] = SPECIAL_BOMBPK;
-					}
-
-					if (map[y + 1][x + 1] == MAP_STONE && map[y + 2][x + 1] == MAP_PLAYER) {
+					if (is_stonish(map[y + 1][x + 1]) && map[y + 2][x + 1] == MAP_PLAYER) {
 						player_died();
 					}
 
@@ -557,7 +495,6 @@ void create_map(char* mapname) {
 	for (int y = 0; y < MAP_YSIZE; y++) {
 		for (int x = 0; x < MAP_XSIZE; x++) {
 			map[y][x] = MAP_EMPTY;
-			special[y][x] = 0;
 		}
 	}
 
@@ -648,8 +585,7 @@ void explode(int x, int y, int len, int chr) {
 void explode_put(int y, int x, int chr) {
 	if ((x > 1 && MAP_XSIZE - 2 > x) && (y > 1 && MAP_YSIZE - 1> y)) {
 		mvaddch(y, x, chr);
-		map[y][x] = MAP_STONE;
-		special[y][x] = SPECIAL_DIAMOND;
+		map[y][x] = MAP_DIAMOND;
 	}
 }
 
@@ -658,7 +594,7 @@ int count_diamonds() {
 
 	for (int y = 0; y < MAP_YSIZE; y++) {
 		for (int x = 0; x < MAP_XSIZE; x++) {
-			if (special[y][x] == SPECIAL_DIAMOND) {
+			if (map[y][x] == MAP_DIAMOND) {
 				num_diamonds++;
 			}
 		}
@@ -728,25 +664,6 @@ void got_extralife() {
 		lives++;
 		score_last_extralife = score;
 		draw_status();
-	}
-}
-
-void fix_map(void) {
-	for (int y = 0; y < MAP_YSIZE; y++) {
-		for (int x = 0; x < MAP_XSIZE; x++) {
-			if (map[y][x] == MAP_DIAMOND) {
-				map[y][x] = MAP_STONE;
-				special[y][x] = SPECIAL_DIAMOND;
-			}
-			if (map[y][x] == MAP_MONEY) {
-				map[y][x] = MAP_STONE;
-				special[y][x] = SPECIAL_MONEY;
-			}
-			if (map[y][x] == MAP_BOMBPK) {
-				map[y][x] = MAP_STONE;
-				special[y][x] = SPECIAL_BOMBPK;
-			}
-		}
 	}
 }
 
@@ -822,7 +739,7 @@ void explode_bombs(void) {
 
 	for (int y = 0; y < MAP_YSIZE; y++) {
 		for (int x = 0; x < MAP_XSIZE; x++) {
-			if (map[y][x] == MAP_STONE && special[y][x] == SPECIAL_BOMB) {
+			if (map[y][x] == MAP_BOMB) {
 				_beep();
 				for (int by = y - 1; by < y + 2; by++) {
 					for (int bx = x - 1; bx < x + 2; bx++) {
@@ -830,9 +747,8 @@ void explode_bombs(void) {
 							playerdied = 1;
 						}
 
-						if (map[by][bx] != MAP_WALL && special[by][bx] != SPECIAL_DIAMOND) {
+						if (map[by][bx] != MAP_WALL && map[by][bx] != MAP_DIAMOND) {
 							map[by][bx] = MAP_EMPTY;
-							special[by][bx] = 0;
 							mvaddch(by + 1, bx, '+');
 							refresh();
 						}

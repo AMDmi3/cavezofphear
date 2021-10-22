@@ -47,11 +47,6 @@
 #define MAP_BOMBPK  7
 #define MAP_MONSTER 8
 
-#define SPECIAL_DIAMOND  1
-#define SPECIAL_MONEY    2
-#define SPECIAL_BOMB     3
-#define SPECIAL_BOMBPK   4
-
 #define POINTS_DIAMOND   10
 #define POINTS_MONEY     100
 
