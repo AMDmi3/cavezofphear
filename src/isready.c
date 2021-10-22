@@ -13,7 +13,7 @@
 
     You should have received a copy of the GNU General Public License along with CAVEZ OF PHEAR. If not,
     see http://www.gnu.org/licenses/.
-*/
+ */
 
 #include <stdio.h>
 #include <sys/select.h>
@@ -25,19 +25,19 @@
 
 int isready(int fd);
 
-int isready(int fd)
-{
-  int rc;
-  fd_set fds;
-  struct timeval tv;
+int isready(int fd) {
+	int rc;
+	fd_set fds;
+	struct timeval tv;
 
-  FD_ZERO(&fds);
-  FD_SET(fd,&fds);
-  tv.tv_sec = tv.tv_usec = 0;
+	FD_ZERO(&fds);
+	FD_SET(fd, &fds);
+	tv.tv_sec = tv.tv_usec = 0;
 
-  rc = select(fd+1, &fds, NULL, NULL, &tv);
-  if (rc < 0)
-    return -1;
+	rc = select(fd + 1, &fds, NULL, NULL, &tv);
+	if (rc < 0) {
+		return -1;
+	}
 
-  return FD_ISSET(fd,&fds) ? 1 : 0;
+	return FD_ISSET(fd, &fds) ? 1 : 0;
 }

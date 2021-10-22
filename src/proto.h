@@ -13,7 +13,7 @@
 
     You should have received a copy of the GNU General Public License along with Foobar. If not,
     see http://www.gnu.org/licenses/.
-*/
+ */
 
 
 int mainloop(void);
@@ -21,7 +21,7 @@ void make_ready(void);
 
 void curses_start(void);
 void curses_stop(void);
-void bail(char *message);
+void bail(char* message);
 void sigint_handler();
 void sigwinch_handler();
 
@@ -31,7 +31,7 @@ void _beep(void);
 
 void draw_map(void);
 int update_map(void);
-void create_map(char *mapname);
+void create_map(char* mapname);
 void fix_map();
 void draw_status(void);
 
@@ -48,23 +48,23 @@ void level_done(int x, int y);
 
 void got_bombs();
 
-int editor_main(char *file);
-int save_map(char *filename);
-int load_map(char *filename, char map[MAP_YSIZE][MAP_XSIZE]);
+int editor_main(char* file);
+int save_map(char* filename);
+int load_map(char* filename, char map[MAP_YSIZE][MAP_XSIZE]);
 void editor_draw_status(void);
 void editor_draw_map(void);
 
-int calc_center(int slen); 
-int msgbox(char *meesage);
+int calc_center(int slen);
+int msgbox(char* meesage);
 int wait_for_input(void);
 
 void splash(void);
-int gplot(char *filename, int x_offset, int y_offset, int ign_space);
+int gplot(char* filename, int x_offset, int y_offset, int ign_space);
 void gameover(void);
 
 void chk_all(void);
-int chk_file(char *dir, char *filename);
-char *get_data_dir(int verbose);
+int chk_file(char* dir, char* filename);
+char* get_data_dir(int verbose);
 
 
 int count_object(int object);
