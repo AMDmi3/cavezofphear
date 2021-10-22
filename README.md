@@ -1,3 +1,10 @@
+<a href="https://repology.org/project/cavezofphear/versions">
+	<img src="https://repology.org/badge/vertical-allrepos/cavezofphear.svg" alt="Packaging status" align="right">
+</a>
+
+[![CI](https://github.com/AMDmi3/cavezofphear/actions/workflows/ci.yml/badge.svg)](https://github.com/AMDmi3/cavezofphear/actions/workflows/ci.yml)
+[![Github commits (since latest release)](https://img.shields.io/github/commits-since/AMDmi3/cavezofphear/latest.svg)](https://github.com/AMDmi3/cavezofphear)
+
 # CAVEZ of PHEAR
 
 You are trapped in the CAVEZ of PHEAR, your mission is to escape
