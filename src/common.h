@@ -19,7 +19,7 @@
 #define COMMON_H
 
 #ifndef VERSION
-#error VERSION is expected to be defied by the build system
+#error VERSION is expected to be defined by the build system
 #endif
 
 #define MAP_XSIZE 80
