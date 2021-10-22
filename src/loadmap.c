@@ -22,20 +22,16 @@
 #include <stdio.h>
 
 int load_map(const char* filename, char map[MAP_YSIZE][MAP_XSIZE]) {
-	int x, y;
-	FILE* fp;
-	int c;
-
-	fp = fopen(filename, "r");
+	FILE* fp = fopen(filename, "r");
 	if (fp == NULL) {
 		return 1;
 	}
 
-	for (y = 0; y < MAP_YSIZE; y++) {
-		for (x = 0; x < MAP_XSIZE; x++) {
+	for (int y = 0; y < MAP_YSIZE; y++) {
+		for (int x = 0; x < MAP_XSIZE; x++) {
 			map[y][x] = 0;
 
-			c = fgetc(fp);
+			int c = fgetc(fp);
 			if (c == EOF) {
 				fclose(fp);
 				return 1;

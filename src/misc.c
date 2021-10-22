@@ -28,12 +28,11 @@ int calc_center(int slen) {
 }
 
 int msgbox(const char* message) {
-	int len = strlen(message);
-	int x;
+	const int len = strlen(message);
 
 	attrset(COLOR_PAIR(COLOR_WHITE) | A_BOLD);
 
-	for (x = -5; x < len + 5; x++) {
+	for (int x = -5; x < len + 5; x++) {
 		mvaddch(MAP_YSIZE / 2 - 2, (MAP_XSIZE / 2) - (len / 2) + x, '+');
 		mvaddch(MAP_YSIZE / 2 - 1, (MAP_XSIZE / 2) - (len / 2) + x, '+');
 		mvaddch(MAP_YSIZE / 2 + 0, (MAP_XSIZE / 2) - (len / 2) + x, '+');
@@ -41,7 +40,7 @@ int msgbox(const char* message) {
 		mvaddch(MAP_YSIZE / 2 + 2, (MAP_XSIZE / 2) - (len / 2) + x, '+');
 	}
 
-	for (x = -3; x < len + 3; x++) {
+	for (int x = -3; x < len + 3; x++) {
 		mvaddch(MAP_YSIZE / 2 - 1, (MAP_XSIZE / 2) - (len / 2) + x, ' ');
 		mvaddch(MAP_YSIZE / 2 + 0, (MAP_XSIZE / 2) - (len / 2) + x, ' ');
 		mvaddch(MAP_YSIZE / 2 + 1, (MAP_XSIZE / 2) - (len / 2) + x, ' ');
@@ -62,9 +61,7 @@ int wait_for_input(void) {
 }
 
 void fade_dissolv(void) {
-	int i;
-
-	for (i = 0; i < 1000 * 10; i++) {
+	for (int i = 0; i < 1000 * 10; i++) {
 		mvaddch(rand() % (MAP_YSIZE + 2), rand() % MAP_XSIZE, ' ');
 		refresh();
 	}

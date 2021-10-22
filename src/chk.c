@@ -62,12 +62,11 @@ void chk_all(void) {
 }
 
 int chk_file(const char* dir, const char* filename) {
-	FILE* fp;
 	char fname[1024];
 
 	snprintf(fname, sizeof fname, "%s/%s", dir, filename);
 
-	fp = fopen(fname, "r");
+	FILE* fp = fopen(fname, "r");
 	if (fp == NULL) {
 		return 1;
 	}

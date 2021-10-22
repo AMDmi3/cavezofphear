@@ -24,21 +24,18 @@
 #include <ncurses.h>
 
 int gplot(const char* filename, int x_offset, int y_offset, int ign_space) {
-	FILE* fp;
-	int x, y;
-	int c;
 	char fname[1024];
-
 	snprintf(fname, sizeof fname, "%s%s", get_data_dir(), filename);
 
-	x = x_offset;
-	y = y_offset;
+	int x = x_offset;
+	int y = y_offset;
 
-	fp = fopen(fname, "r");
+	FILE* fp = fopen(fname, "r");
 	if (fp == NULL) {
 		return 1;
 	}
 
+	int c;
 	while ((c = fgetc(fp)) != EOF) {
 		if (c == '\n') {
 			y++;

@@ -21,16 +21,15 @@
 #include <stddef.h>
 
 int isready(int fd) {
-	int rc;
 	fd_set fds;
-	struct timeval tv;
 
 	FD_ZERO(&fds);
 	FD_SET(fd, &fds);
+
+	struct timeval tv;
 	tv.tv_sec = tv.tv_usec = 0;
 
-	rc = select(fd + 1, &fds, NULL, NULL, &tv);
-	if (rc < 0) {
+	if (select(fd + 1, &fds, NULL, NULL, &tv) < 0) {
 		return -1;
 	}
 

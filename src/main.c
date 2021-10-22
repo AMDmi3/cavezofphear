@@ -137,22 +137,6 @@ void make_ready(void) {
 }
 
 int mainloop(void) {
-	int i;
-	int input;
-	int old_p_x;
-	int old_p_y;
-	int x_direction = 0;
-	int update_delay;
-	int changes;
-	int x, y;
-	int rval;
-	long last_tick_time = 0;
-	int tick = 100;
-	int ticks_per_second = 100;
-	int mcount = 0;
-	int mloop_delay = 10000;
-
-
 	erase();
 
 	create_map(current_map);
@@ -161,8 +145,8 @@ int mainloop(void) {
 	p_x = 1;
 	p_y = 1;
 
-	for (y = 0; y < MAP_YSIZE; y++) {
-		for (x = 0; x < MAP_XSIZE; x++) {
+	for (int y = 0; y < MAP_YSIZE; y++) {
+		for (int x = 0; x < MAP_XSIZE; x++) {
 			if (map[y][x] == MAP_PLAYER) {
 				p_x = x;
 				p_y = y;
@@ -176,12 +160,19 @@ int mainloop(void) {
 
 	while (update_map() > 0) {
 	}
+
 	draw_map();
 	draw_status();
 	refresh();
 
 	flushinp();
 
+	int x_direction = 0;
+	long last_tick_time = 0;
+	int tick = 100;
+	int ticks_per_second = 100;
+	int mcount = 0;
+	int mloop_delay = 10000;
 	while (1) {
 		tick++;
 		if (time(NULL) > last_tick_time) {
@@ -216,7 +207,7 @@ int mainloop(void) {
 		}
 
 		if (isready(0)) {
-			input = getch();
+			int input = getch();
 			flushinp();
 
 			if (tolower(input) == 'b') {
@@ -247,7 +238,7 @@ int mainloop(void) {
 
 			if (tolower(input) == 'q') {
 				for (;;) {
-					rval = tolower(msgbox("Are you sure you want to quit? (Yes/No)"));
+					int rval = tolower(msgbox("Are you sure you want to quit? (Yes/No)"));
 					if (rval == 'y' || rval == '\n' || rval == ' ') {
 						curses_stop();
 						exit(0);
@@ -273,7 +264,7 @@ int mainloop(void) {
 			}
 
 			if (tolower(input) == 'w') { /* stupid feature to make lh stfu */
-				for (i = 0; i < 3; i++) {
+				for (int i = 0; i < 3; i++) {
 					attrset(COLOR_PAIR(COLOR_WHITE) | A_BOLD);
 					mvaddch(p_y - 1, p_x, '+');
 					mvaddch(p_y + 3, p_x, '+');
@@ -293,8 +284,8 @@ int mainloop(void) {
 			}
 
 			map[p_y][p_x] = 0;
-			old_p_y = p_y;
-			old_p_x = p_x;
+			int old_p_y = p_y;
+			int old_p_x = p_x;
 
 			if (input == KEY_UP || input == '8') {
 				p_y--;
@@ -379,19 +370,18 @@ int mainloop(void) {
 
 			map[p_y][p_x] = MAP_PLAYER;
 
-			update_delay = UPDATE_DELAY;
+			int update_delay = UPDATE_DELAY;
 
 			for (;;) { // XXX: this is lame, fix it using ticks?
 				draw_map();
 				draw_status();
 				refresh();
 
-				for (i = 0; i < update_delay; i++) {
+				for (int i = 0; i < update_delay; i++) {
 					continue;
 				}
 
-				changes = update_map();
-				if (changes == 0) {
+				if (update_map() == 0) {
 					break;
 				}
 
@@ -413,10 +403,8 @@ int mainloop(void) {
 }
 
 void draw_map(void) {
-	int x, y;
-
-	for (y = 0; y < MAP_YSIZE; y++) {
-		for (x = 0; x < MAP_XSIZE; x++) {
+	for (int y = 0; y < MAP_YSIZE; y++) {
+		for (int x = 0; x < MAP_XSIZE; x++) {
 			if (map[y][x] == MAP_EMPTY) {
 				mvaddch(y + 1, x, CHR_EMPTY);
 			}
@@ -454,11 +442,10 @@ void draw_map(void) {
 }
 
 int update_map(void) {
-	int x, y;
 	int changes = 0;
 
-	for (y = 0; y < MAP_YSIZE; y++) {
-		for (x = 0; x < MAP_XSIZE; x++) {
+	for (int y = 0; y < MAP_YSIZE; y++) {
+		for (int x = 0; x < MAP_XSIZE; x++) {
 			if (map[y][x] == MAP_EMPTY && special[y][x] == 3) {
 				map[y][x] = MAP_STONE;
 				return 1;
@@ -567,16 +554,14 @@ int update_map(void) {
 }
 
 void create_map(char* mapname) {
-	int y, x;
-	char mstr[64];
-
-	for (y = 0; y < MAP_YSIZE; y++) {
-		for (x = 0; x < MAP_XSIZE; x++) {
+	for (int y = 0; y < MAP_YSIZE; y++) {
+		for (int x = 0; x < MAP_XSIZE; x++) {
 			map[y][x] = MAP_EMPTY;
 			special[y][x] = 0;
 		}
 	}
 
+	char mstr[64];
 	if (mapname[0] == 0x00) {
 		snprintf(mstr, sizeof mstr - 1, "%s/levels/%02d", get_data_dir(), level);
 	} else {
@@ -592,8 +577,6 @@ void create_map(char* mapname) {
 }
 
 void player_died(void) {
-	int rval;
-
 	lives--;
 	bombs = 0;
 
@@ -621,7 +604,7 @@ void player_died(void) {
 		sleep(2);
 
 		for (;;) {
-			rval = tolower(msgbox("Game over! Play again? (Y/N)"));
+			int rval = tolower(msgbox("Game over! Play again? (Y/N)"));
 
 			if (rval == 'y' || rval == '\n' || rval == ' ') {
 				make_ready();

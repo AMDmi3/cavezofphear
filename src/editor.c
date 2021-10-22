@@ -39,21 +39,13 @@ int count_object(int object);
 void editor_draw_status(void);
 
 int editor_main(char* file) {
-	FILE* fp;
-	int x, y;
-	int xx, yy;
-	int input;
-	int rval;
-
 	if (!file) {
 		fprintf(stderr, "usage: phear -e <file>\n");
 		exit(1);
 	}
 
-
-
-	for (y = 0; y < MAP_YSIZE; y++) {
-		for (x = 0; x < MAP_XSIZE; x++) {
+	for (int y = 0; y < MAP_YSIZE; y++) {
+		for (int x = 0; x < MAP_XSIZE; x++) {
 			map[y][x] = 0;
 		}
 	}
@@ -68,33 +60,33 @@ int editor_main(char* file) {
 	signal(SIGINT, sigint_handler);
 	signal(SIGWINCH, sigwinch_handler);
 
-	fp = fopen(file, "r");
+	FILE* fp = fopen(file, "r");
 	if (fp != NULL) {
 		fclose(fp);
 		load_map(file, map);
 	}
 
-	for (x = 0; x < MAP_XSIZE; x++) {
+	for (int x = 0; x < MAP_XSIZE; x++) {
 		map[0][x] = MAP_WALL;
 	}
-	for (x = 0; x < MAP_XSIZE; x++) {
+	for (int x = 0; x < MAP_XSIZE; x++) {
 		map[MAP_YSIZE - 1][x] = MAP_WALL;
 	}
-	for (y = 0; y < MAP_YSIZE; y++) {
+	for (int y = 0; y < MAP_YSIZE; y++) {
 		map[y][0] = MAP_WALL;
 	}
-	for (y = 0; y < MAP_YSIZE; y++) {
+	for (int y = 0; y < MAP_YSIZE; y++) {
 		map[y][MAP_XSIZE - 1] = MAP_WALL;
 	}
-	for (y = 0; y < MAP_YSIZE; y++) {
+	for (int y = 0; y < MAP_YSIZE; y++) {
 		map[y][1] = MAP_WALL;
 	}
-	for (y = 0; y < MAP_YSIZE; y++) {
+	for (int y = 0; y < MAP_YSIZE; y++) {
 		map[y][MAP_XSIZE - 2] = MAP_WALL;
 	}
 
-	x = 2;
-	y = 2;
+	int x = 2;
+	int y = 2;
 
 	lock = 0;
 
@@ -110,7 +102,7 @@ int editor_main(char* file) {
 		editor_draw_map();
 		refresh();
 
-		input = mvgetch(y, x);
+		int input = mvgetch(y, x);
 
 		if (input == KEY_UP) {
 			y--;
@@ -190,8 +182,8 @@ int editor_main(char* file) {
 		}
 		if (input == '9') {
 			/* last_obj = MAP_PLAYER; */
-			for (yy = 0; yy < MAP_YSIZE; yy++) {
-				for (xx = 0; xx < MAP_XSIZE; xx++) {
+			for (int yy = 0; yy < MAP_YSIZE; yy++) {
+				for (int xx = 0; xx < MAP_XSIZE; xx++) {
 					if (map[yy][xx] == MAP_PLAYER) {
 						map[yy][xx] = MAP_EMPTY;
 					}
@@ -220,7 +212,7 @@ int editor_main(char* file) {
 			curs_set(0);
 
 			for (;;) {
-				rval = tolower(msgbox("Are you sure you want to quit? (Yes/No)"));
+				int rval = tolower(msgbox("Are you sure you want to quit? (Yes/No)"));
 				if (rval == 'y' || rval == '\n' || rval == ' ') {
 					curses_stop();
 					exit(0);
@@ -283,20 +275,17 @@ void editor_draw_map(void) {
 }
 
 int save_map(char* filename) {
-	int x, y;
-	FILE* fp;
-
 	curs_set(0);
 
-	fp = fopen(filename, "w");
+	FILE* fp = fopen(filename, "w");
 	if (fp == NULL) {
 		msgbox("ERROR: Unable to open file for writing!");
 		curs_set(1);
 		return 1;
 	}
 
-	for (y = 0; y < MAP_YSIZE; y++) {
-		for (x = 0; x < MAP_XSIZE; x++) {
+	for (int y = 0; y < MAP_YSIZE; y++) {
+		for (int x = 0; x < MAP_XSIZE; x++) {
 			fputc(map[y][x], fp);
 		}
 	}
@@ -310,11 +299,10 @@ int save_map(char* filename) {
 }
 
 int count_object(int object) {
-	int x, y;
 	int rval = 0;
 
-	for (y = 0; y < MAP_YSIZE; y++) {
-		for (x = 0; x < MAP_XSIZE; x++) {
+	for (int y = 0; y < MAP_YSIZE; y++) {
+		for (int x = 0; x < MAP_XSIZE; x++) {
 			if (map[y][x] == object) {
 				rval++;
 			}

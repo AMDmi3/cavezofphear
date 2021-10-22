@@ -26,8 +26,6 @@
 #include <unistd.h>
 
 void splash(void) {
-	int x;
-
 	attrset(COLOR_PAIR(COLOR_RED) | A_BOLD);
 	gplot("htext", 20, 1, 1);
 
@@ -38,7 +36,7 @@ void splash(void) {
 	mvprintw(4, MAP_XSIZE - strlen(VERSION), "%s", VERSION);
 
 	attrset(COLOR_PAIR(COLOR_CYAN));
-	for (x = 0; x < MAP_XSIZE; x++) {
+	for (int x = 0; x < MAP_XSIZE; x++) {
 		mvaddch(MAP_YSIZE - 1, x, ':');
 		mvaddch(0, x, ':');
 	}
@@ -54,7 +52,7 @@ void splash(void) {
 
 	mysleep(100000);
 
-	for (x = -40; x < 0; x++) {
+	for (int x = -40; x < 0; x++) {
 		gplot("spgraf", x, 1, 0);
 		refresh();
 		mysleep(7000);
