@@ -26,7 +26,7 @@ void bail(char *message);
 void sigint_handler();
 void sigwinch_handler();
 
-int need_refresh;
+extern int need_refresh;
 
 void curses_start(void)
 {

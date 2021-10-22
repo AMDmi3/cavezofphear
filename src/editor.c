@@ -24,7 +24,7 @@
 #include "common.h"
 #include "proto.h"
 
-char map[MAP_YSIZE][MAP_XSIZE];
+extern char map[MAP_YSIZE][MAP_XSIZE];
 int lock;
 int last_obj;
 
