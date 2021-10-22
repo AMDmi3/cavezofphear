@@ -21,7 +21,7 @@
 
 #include <ncurses.h>
 
-int load_map(char* filename, char map[MAP_YSIZE][MAP_XSIZE]) {
+int load_map(const char* filename, char map[MAP_YSIZE][MAP_XSIZE]) {
 	int x, y;
 	FILE* fp;
 	int c;

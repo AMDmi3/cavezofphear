@@ -20,6 +20,6 @@
 
 #include "common.h"
 
-int load_map(char* filename, char map[MAP_YSIZE][MAP_XSIZE]);
+int load_map(const char* filename, char map[MAP_YSIZE][MAP_XSIZE]);
 
 #endif
