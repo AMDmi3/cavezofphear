@@ -58,9 +58,9 @@ objects, `s` to save the map, `q` to quit and `l` to elabme lock-mode
 
 ## History and credits
 
-The game is written by Tom Rune Flo <tom@x86.no> with latest version
-0.5.1 published on 2011-11-30. Currently maintainerd by [Dmitry
-Marakasov](https://github.com/AMDmi3) <amdmi3@amdmi3.ru>.
+The game was originally written by Tom Rune Flo <<tom@x86.no>> with
+latest version 0.5.1 published on 2011-11-30. Currently maintained
+by [Dmitry Marakasov](https://github.com/AMDmi3) <<amdmi3@amdmi3.ru>>.
 
 ## License
 
