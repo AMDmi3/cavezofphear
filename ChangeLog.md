@@ -1,3 +1,6 @@
+## CAVEZ of PHEAR 0.5.3 (2021-10-22)
+- Source code cleanup.
+
 ## CAVEZ of PHEAR 0.5.2 (2021-10-22)
 - Adopted by new maintainer Dmitry Marakasov.
 - Switched to CMake build system.
