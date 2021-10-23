@@ -57,20 +57,12 @@ int editor_main(const char* file) {
 
 	for (int x = 0; x < MAP_XSIZE; x++) {
 		map[0][x] = MAP_WALL;
-	}
-	for (int x = 0; x < MAP_XSIZE; x++) {
 		map[MAP_YSIZE - 1][x] = MAP_WALL;
 	}
 	for (int y = 0; y < MAP_YSIZE; y++) {
 		map[y][0] = MAP_WALL;
-	}
-	for (int y = 0; y < MAP_YSIZE; y++) {
 		map[y][MAP_XSIZE - 1] = MAP_WALL;
-	}
-	for (int y = 0; y < MAP_YSIZE; y++) {
 		map[y][1] = MAP_WALL;
-	}
-	for (int y = 0; y < MAP_YSIZE; y++) {
 		map[y][MAP_XSIZE - 2] = MAP_WALL;
 	}
 
