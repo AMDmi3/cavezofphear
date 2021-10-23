@@ -145,6 +145,55 @@ int is_stonish(char type) {
 		   type == MAP_BOMBPK;
 }
 
+void move_player(int dx, int dy) {
+	const int new_p_x = p_x + dx;
+	const int new_p_y = p_y + dy;
+
+	switch (map[new_p_y][new_p_x]) {
+	case MAP_MONSTER:
+		player_died();
+		break;
+	case MAP_DIAMOND:
+		got_diamond();
+		break;
+	case MAP_MONEY:
+		got_money();
+		break;
+	case MAP_BOMBPK:
+		got_bombs();
+		break;
+	case MAP_STONE:
+	case MAP_BOMB:
+		if (dx == -1 && map[new_p_y][new_p_x - 1] == MAP_EMPTY) {
+			// push left
+			map[new_p_y][new_p_x - 1] = map[new_p_y][new_p_x];
+		} else if (dx == +1 && map[new_p_y][new_p_x + 1] == MAP_EMPTY) {
+			// push right
+			map[new_p_y][new_p_x + 1] = map[new_p_y][new_p_x];
+		} else {
+			return;  // blocked
+		}
+		break;
+	case MAP_WALL:
+		return;  // blocked
+	case MAP_EMPTY:  // move freely
+	case MAP_DIRT:   // move and
+		break;
+	case MAP_PLAYER:
+		// XXX: assert(false);
+		break;
+	}
+
+	// update old location
+	map[p_y][p_x] = item_behind_player;
+	item_behind_player = MAP_EMPTY;
+
+	// update player pos and new location
+	p_x = new_p_x;
+	p_y = new_p_y;
+	map[p_y][p_x] = MAP_PLAYER;
+}
+
 int mainloop(void) {
 	erase();
 
@@ -180,7 +229,6 @@ int mainloop(void) {
 
 	flushinp();
 
-	int x_direction = 0;
 	long last_tick_time = 0;
 	int tick = 100;
 	int ticks_per_second = 100;
@@ -296,76 +344,19 @@ int mainloop(void) {
 			}
 
 			// move player
-			map[p_y][p_x] = item_behind_player;
-			int player_moved = 1;
-			int old_p_y = p_y;
-			int old_p_x = p_x;
-
 			if (input == KEY_UP || input == '8') {
-				p_y--;
-				x_direction = +0;
+				move_player(0, -1);
 			}
 			if (input == KEY_DOWN || input == '2') {
-				p_y++;
-				x_direction = +0;
+				move_player(0, 1);
 			}
 			if (input == KEY_LEFT || input == '4') {
-				p_x--;
-				x_direction = -1;
+				move_player(-1, 0);
 			}
 			if (input == KEY_RIGHT || input == '6') {
-				p_x++;
-				x_direction = +1;
+				move_player(1, 0);
 			}
 
-			if (map[p_y][p_x] == MAP_WALL) {
-				p_y = old_p_y;
-				p_x = old_p_x;
-			}
-
-			if (map[p_y][p_x] == MAP_MONSTER) {
-				player_died();
-			}
-
-			if (is_stonish(map[p_y][p_x]) && x_direction == -1 && map[p_y][p_x - 1] == MAP_EMPTY) {
-				// try to push left
-				if (map[p_y][p_x] == MAP_DIAMOND) {
-					got_diamond();
-				} else if (map[p_y][p_x] == MAP_MONEY) {
-					got_money();
-				} else if (map[p_y][p_x] == MAP_BOMBPK) {
-					got_bombs();
-				} else { // STONE or BOMB
-					map[p_y][p_x - 1] = map[p_y][p_x];
-				}
-			} else if (is_stonish(map[p_y][p_x]) && x_direction == +1 && map[p_y][p_x + 1] == MAP_EMPTY) {
-				// try to push right
-				if (map[p_y][p_x] == MAP_DIAMOND) {
-					got_diamond();
-				} else if (map[p_y][p_x] == MAP_MONEY) {
-					got_money();
-				} else if (map[p_y][p_x] == MAP_BOMBPK) {
-					got_bombs();
-				} else {
-					map[p_y][p_x + 1] = map[p_y][p_x];
-				}
-			} else if (map[p_y][p_x] == MAP_STONE || map[p_y][p_x] == MAP_BOMB) {
-				// blocked
-				player_moved = 0;
-				p_y = old_p_y;
-				p_x = old_p_x;
-			} else if (map[p_y][p_x] == MAP_DIAMOND) {
-				got_diamond();
-			} else if (map[p_y][p_x] == MAP_MONEY) {
-				got_money();
-			} else if (map[p_y][p_x] == MAP_BOMBPK) {
-				got_bombs();
-			}
-
-			if (player_moved) {
-				item_behind_player = MAP_EMPTY;
-			}
-			map[p_y][p_x] = MAP_PLAYER;
 
 			int update_delay = UPDATE_DELAY;
 
