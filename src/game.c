@@ -64,7 +64,7 @@ void got_extralife();
 void level_done(int x, int y);
 void draw_status(void);
 void _beep(void);
-void explode_bombs(void);
+void try_explode_bombs(void);
 int do_the_monster_dance(void);
 
 int game_main(const char* custom_map_path) {
@@ -164,6 +164,109 @@ void move_player(int dx, int dy) {
 	map[p_y][p_x] = MAP_PLAYER;
 }
 
+void try_place_bomb() {
+	if (bombs > 0 && item_behind_player != MAP_BOMB) {
+		bombs--;
+
+		if (map[p_y + 1][p_x] == MAP_EMPTY) {
+			// bomb falls down
+			map[p_y + 1][p_x] = MAP_BOMB;
+		} else if (is_stonish(map[p_y + 1][p_x]) && map[p_y + 1][p_x + 1] == MAP_EMPTY && map[p_y][p_x + 1] == MAP_EMPTY) {
+			// bomb rolls right
+			map[p_y + 1][p_x + 1] = MAP_BOMB;
+		} else if (is_stonish(map[p_y + 1][p_x]) && map[p_y + 1][p_x - 1] == MAP_EMPTY && map[p_y][p_x - 1] == MAP_EMPTY) {
+			// bomb rolls left
+			map[p_y + 1][p_x - 1] = MAP_BOMB;
+		} else {
+			// bomb is placed at player location
+			item_behind_player = MAP_BOMB;
+		}
+		need_refresh = 1;
+	}
+}
+
+void commit_suicide() {
+	map[p_y][p_x] = MAP_DIAMOND;
+	player_died();
+}
+
+void handle_input(int key) {
+	switch (tolower(key)) {
+	case 'b':
+		try_place_bomb();
+		break;
+
+	case 't':
+		try_explode_bombs();
+		break;
+
+	case 'q':
+		for (;;) {
+			int rval = tolower(msgbox("Are you sure you want to quit? (Yes/No)"));
+			if (rval == 'y' || rval == '\n' || rval == ' ') {
+				curses_stop();
+				exit(0);
+			} else if (rval == 'n') {
+				break;
+			}
+		}
+		break;
+
+	case 'k':
+		commit_suicide();
+		break;
+
+	case 's':
+		if (option_sound == 0) {
+			option_sound = 1;
+			_beep();
+		} else {
+			option_sound = 0;
+		}
+		break;
+
+	case 'w':
+		for (int i = 0; i < 3; i++) {
+			attrset(COLOR_PAIR(COLOR_WHITE) | A_BOLD);
+			mvaddch(p_y - 1, p_x, '+');
+			mvaddch(p_y + 3, p_x, '+');
+			mvaddch(p_y + 1, p_x + 2, '+');
+			mvaddch(p_y + 1, p_x - 2, '+');
+			attrset(A_NORMAL);
+			refresh();
+			mysleep(90000);
+			draw_map();
+			refresh();
+			mysleep(50000);
+		}
+		erase();
+		draw_map();
+		draw_status();
+		refresh();
+		break;
+
+	case KEY_UP:
+	case '8':
+		move_player(0, -1);
+		break;
+
+	case KEY_DOWN:
+	case '2':
+		move_player(0, 1);
+		break;
+
+	case KEY_LEFT:
+	case '4':
+		move_player(-1, 0);
+		break;
+
+	case KEY_RIGHT:
+	case '6':
+		move_player(1, 0);
+		break;
+	}
+}
+
 int mainloop(void) {
 	erase();
 
@@ -241,92 +344,7 @@ int mainloop(void) {
 			int input = getch();
 			flushinp();
 
-			if (tolower(input) == 'b') {
-				if (bombs > 0 && item_behind_player != MAP_BOMB) {
-					bombs--;
-
-					if (map[p_y + 1][p_x] == MAP_EMPTY) {
-						// bomb falls down
-						map[p_y + 1][p_x] = MAP_BOMB;
-					} else if (is_stonish(map[p_y + 1][p_x]) && map[p_y + 1][p_x + 1] == MAP_EMPTY && map[p_y][p_x + 1] == MAP_EMPTY) {
-						// bomb rolls right
-						map[p_y + 1][p_x + 1] = MAP_BOMB;
-					} else if (is_stonish(map[p_y + 1][p_x]) && map[p_y + 1][p_x - 1] == MAP_EMPTY && map[p_y][p_x - 1] == MAP_EMPTY) {
-						// bomb rolls left
-						map[p_y + 1][p_x - 1] = MAP_BOMB;
-					} else {
-						// bomb is placed at player location
-						item_behind_player = MAP_BOMB;
-					}
-					need_refresh = 1;
-				}
-			}
-
-			if (tolower(input) == 't') {
-				explode_bombs();
-				need_refresh = 1;
-			}
-
-			if (tolower(input) == 'q') {
-				for (;;) {
-					int rval = tolower(msgbox("Are you sure you want to quit? (Yes/No)"));
-					if (rval == 'y' || rval == '\n' || rval == ' ') {
-						curses_stop();
-						exit(0);
-					} else if (rval == 'n') {
-						break;
-					}
-				}
-			}
-
-			if (tolower(input) == 'k') {
-				map[p_y][p_x] = MAP_DIAMOND;
-				player_died();
-			}
-
-			if (tolower(input) == 's') {
-				if (option_sound == 0) {
-					option_sound = 1;
-					_beep();
-				} else {
-					option_sound = 0;
-				}
-			}
-
-			if (tolower(input) == 'w') { /* stupid feature to make lh stfu */
-				for (int i = 0; i < 3; i++) {
-					attrset(COLOR_PAIR(COLOR_WHITE) | A_BOLD);
-					mvaddch(p_y - 1, p_x, '+');
-					mvaddch(p_y + 3, p_x, '+');
-					mvaddch(p_y + 1, p_x + 2, '+');
-					mvaddch(p_y + 1, p_x - 2, '+');
-					attrset(A_NORMAL);
-					refresh();
-					mysleep(90000);
-					draw_map();
-					refresh();
-					mysleep(50000);
-				}
-				erase();
-				draw_map();
-				draw_status();
-				refresh();
-			}
-
-			// move player
-			if (input == KEY_UP || input == '8') {
-				move_player(0, -1);
-			}
-			if (input == KEY_DOWN || input == '2') {
-				move_player(0, 1);
-			}
-			if (input == KEY_LEFT || input == '4') {
-				move_player(-1, 0);
-			}
-			if (input == KEY_RIGHT || input == '6') {
-				move_player(1, 0);
-			}
-
+			handle_input(input);
 
 			int update_delay = UPDATE_DELAY;
 
@@ -627,12 +645,13 @@ void _beep(void) {
 	}
 }
 
-void explode_bombs(void) {
+void try_explode_bombs(void) {
 	int playerdied = 0;
 
 	for (int y = 0; y < MAP_YSIZE; y++) {
 		for (int x = 0; x < MAP_XSIZE; x++) {
 			if (map[y][x] == MAP_BOMB) {
+				need_refresh = 1;
 				_beep();
 				for (int by = y - 1; by < y + 2; by++) {
 					for (int bx = x - 1; bx < x + 2; bx++) {
