@@ -15,33 +15,43 @@
     see http://www.gnu.org/licenses/.
  */
 
-#include "loadmap.h"
+#include "map.h"
 
-#include "common.h"
+#include <ncurses.h>
 
-#include <stdio.h>
-
-int load_map(const char* filename, char map[MAP_YSIZE][MAP_XSIZE]) {
-	FILE* fp = fopen(filename, "r");
-	if (fp == NULL) {
-		return 1;
-	}
-
+void draw_map(void) {
 	for (int y = 0; y < MAP_YSIZE; y++) {
 		for (int x = 0; x < MAP_XSIZE; x++) {
-			map[y][x] = 0;
-
-			int c = fgetc(fp);
-			if (c == EOF) {
-				fclose(fp);
-				return 1;
+			if (map[y][x] == MAP_EMPTY) {
+				mvaddch(y + 1, x, CHR_EMPTY);
 			}
-
-			map[y][x] = c;
+			if (map[y][x] == MAP_DIRT) {
+				mvaddch(y + 1, x, CHR_DIRT);
+			}
+			if (map[y][x] == MAP_WALL) {
+				mvaddch(y + 1, x, CHR_WALL);
+			}
+			if (map[y][x] == MAP_PLAYER) {
+				mvaddch(y + 1, x, CHR_PLAYER);
+			}
+			if (map[y][x] == MAP_MONSTER) {
+				mvaddch(y + 1, x, CHR_MONSTER);
+			}
+			if (map[y][x] == MAP_STONE) {
+				mvaddch(y + 1, x, CHR_STONE);
+			}
+			if (map[y][x] == MAP_DIAMOND) {
+				mvaddch(y + 1, x, CHR_DIAMOND);
+			}
+			if (map[y][x] == MAP_MONEY) {
+				mvaddch(y + 1, x, CHR_MONEY);
+			}
+			if (map[y][x] == MAP_BOMB) {
+				mvaddch(y + 1, x, CHR_BOMB);
+			}
+			if (map[y][x] == MAP_BOMBPK) {
+				mvaddch(y + 1, x, CHR_BOMBPK);
+			}
 		}
 	}
-
-	fclose(fp);
-
-	return 0;
 }

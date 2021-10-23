@@ -15,11 +15,6 @@
     see http://www.gnu.org/licenses/.
  */
 
-#ifndef LOADMAP_H
-#define LOADMAP_H
+#include "map.h"
 
-#include "common.h"
-
-int load_map(const char* filename, char map[MAP_YSIZE][MAP_XSIZE]);
-
-#endif
+char map[MAP_YSIZE][MAP_XSIZE];

@@ -20,7 +20,7 @@
 #include "editor.h"
 #include "frame.h"
 #include "isready.h"
-#include "loadmap.h"
+#include "map/map.h"
 #include "misc.h"
 #include "splash.h"
 
@@ -34,7 +34,6 @@
 
 #define UPDATE_DELAY 2000000
 
-char map[MAP_YSIZE][MAP_XSIZE];
 char item_behind_player;
 char current_map[1024];
 int p_x;
@@ -52,14 +51,11 @@ int first_bomb;
 
 void make_ready(void);
 int mainloop(void);
-void draw_map(void);
 int update_map(void);
 void create_map(char* mapname);
 void player_died(void);
 void explode(int x, int y, int len, int chr);
 void explode_put(int y, int x, int chr);
-int count_diamonds();
-int count_monsters();
 void got_diamond();
 void got_money();
 void got_bombs();
@@ -218,7 +214,7 @@ int mainloop(void) {
 	map[p_y][p_x] = MAP_PLAYER;
 	item_behind_player = MAP_EMPTY;
 
-	diamonds_left = count_diamonds();
+	diamonds_left = count_map_objects(MAP_DIAMOND);
 
 	while (update_map() > 0) {
 	}
@@ -390,43 +386,6 @@ int mainloop(void) {
 	return EXIT_SUCCESS;
 }
 
-void draw_map(void) {
-	for (int y = 0; y < MAP_YSIZE; y++) {
-		for (int x = 0; x < MAP_XSIZE; x++) {
-			if (map[y][x] == MAP_EMPTY) {
-				mvaddch(y + 1, x, CHR_EMPTY);
-			}
-			if (map[y][x] == MAP_DIRT) {
-				mvaddch(y + 1, x, CHR_DIRT);
-			}
-			if (map[y][x] == MAP_WALL) {
-				mvaddch(y + 1, x, CHR_WALL);
-			}
-			if (map[y][x] == MAP_PLAYER) {
-				mvaddch(y + 1, x, CHR_PLAYER);
-			}
-			if (map[y][x] == MAP_MONSTER) {
-				mvaddch(y + 1, x, CHR_MONSTER);
-			}
-			if (map[y][x] == MAP_STONE) {
-				mvaddch(y + 1, x, CHR_STONE);
-			}
-			if (map[y][x] == MAP_DIAMOND) {
-				mvaddch(y + 1, x, CHR_DIAMOND);
-			}
-			if (map[y][x] == MAP_MONEY) {
-				mvaddch(y + 1, x, CHR_MONEY);
-			}
-			if (map[y][x] == MAP_BOMB) {
-				mvaddch(y + 1, x, CHR_BOMB);
-			}
-			if (map[y][x] == MAP_BOMBPK) {
-				mvaddch(y + 1, x, CHR_BOMBPK);
-			}
-		}
-	}
-}
-
 int update_map(void) {
 	int changes = 0;
 
@@ -496,7 +455,7 @@ void create_map(char* mapname) {
 		snprintf(mstr, sizeof mstr - 1, "%s", mapname);
 	}
 
-	if (load_map(mstr, map) == 1) {
+	if (load_map(mstr) == 1) {
 		bail("error: load_map failed");
 	}
 
@@ -578,34 +537,6 @@ void explode_put(int y, int x, int chr) {
 		mvaddch(y, x, chr);
 		map[y][x] = MAP_DIAMOND;
 	}
-}
-
-int count_diamonds() {
-	int num_diamonds = 0;
-
-	for (int y = 0; y < MAP_YSIZE; y++) {
-		for (int x = 0; x < MAP_XSIZE; x++) {
-			if (map[y][x] == MAP_DIAMOND) {
-				num_diamonds++;
-			}
-		}
-	}
-
-	return num_diamonds;
-}
-
-int count_monsters() {
-	int num_monsters = 0;
-
-	for (int y = 0; y < MAP_YSIZE; y++) {
-		for (int x = 0; x < MAP_XSIZE; x++) {
-			if (map[y][x] == MAP_MONSTER) {
-				num_monsters++;
-			}
-		}
-	}
-
-	return num_monsters;
 }
 
 void got_diamond() {

@@ -19,7 +19,7 @@ set(PHEAR_HEADERS
 	src/frame.h
 	src/gplot.h
 	src/isready.h
-	src/loadmap.h
+	src/map/map.h
 	src/misc.h
 	src/splash.h
 )
@@ -30,8 +30,11 @@ set(PHEAR_SOURCES
 	src/frame.c
 	src/gplot.c
 	src/isready.c
-	src/loadmap.c
 	src/main.c
+	src/map/count.c
+	src/map/draw.c
+	src/map/saveload.c
+	src/map/state.c
 	src/misc.c
 	src/splash.c
 )

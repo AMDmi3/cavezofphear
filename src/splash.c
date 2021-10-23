@@ -19,6 +19,7 @@
 
 #include "common.h"
 #include "misc.h"
+#include "map/map.h"  // XXX: untie from map, use window size instead
 #include "gplot.h"
 
 #include <ncurses.h>

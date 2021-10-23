@@ -19,7 +19,7 @@
 
 #include "common.h"
 #include "frame.h"
-#include "loadmap.h"
+#include "map/map.h"
 #include "misc.h"
 
 #include <ncurses.h>
@@ -33,9 +33,6 @@ extern char map[MAP_YSIZE][MAP_XSIZE];
 int lock;
 int last_obj;
 
-void editor_draw_map(void);
-int save_map(char* filename);
-int count_object(int object);
 void editor_draw_status(void);
 
 int editor_main(char* file) {
@@ -63,7 +60,7 @@ int editor_main(char* file) {
 	FILE* fp = fopen(file, "r");
 	if (fp != NULL) {
 		fclose(fp);
-		load_map(file, map);
+		load_map(file);
 	}
 
 	for (int x = 0; x < MAP_XSIZE; x++) {
@@ -95,11 +92,11 @@ int editor_main(char* file) {
 	editor_draw_status();
 
 	while (1) {
-		if (count_object(MAP_PLAYER) == 0) {
+		if (count_map_objects(MAP_PLAYER) == 0) {
 			map[1][1] = MAP_PLAYER;
 		}
 
-		editor_draw_map();
+		draw_map();
 		refresh();
 
 		int input = mvgetch(y, x);
@@ -195,9 +192,13 @@ int editor_main(char* file) {
 
 		if (tolower(input) == 's') {
 			beep();
+			curs_set(0);
 			if (save_map(file) == 1) {
-				/* bail("error: save_map() failed\n"); */
+				msgbox("ERROR: Unable to open file for writing!");
+			} else {
+				msgbox("Saved successfully!");
 			}
+			curs_set(1);
 		}
 
 		/* if(tolower(input) == 'x') {
@@ -236,80 +237,6 @@ int editor_main(char* file) {
 	}
 
 	return EXIT_SUCCESS;
-}
-
-void editor_draw_map(void) {
-	int x, y;
-
-	for (y = 0; y < MAP_YSIZE; y++) {
-		for (x = 0; x < MAP_XSIZE; x++) {
-			if (map[y][x] == MAP_EMPTY) {
-				mvaddch(y + 1, x, CHR_EMPTY);
-			}
-			if (map[y][x] == MAP_DIRT) {
-				mvaddch(y + 1, x, CHR_DIRT);
-			}
-			if (map[y][x] == MAP_WALL) {
-				mvaddch(y + 1, x, CHR_WALL);
-			}
-			if (map[y][x] == MAP_PLAYER) {
-				mvaddch(y + 1, x, CHR_PLAYER);
-			}
-			if (map[y][x] == MAP_STONE) {
-				mvaddch(y + 1, x, CHR_STONE);
-			}
-			if (map[y][x] == MAP_DIAMOND) {
-				mvaddch(y + 1, x, CHR_DIAMOND);
-			}
-			if (map[y][x] == MAP_MONEY) {
-				mvaddch(y + 1, x, CHR_MONEY);
-			}
-			if (map[y][x] == MAP_BOMBPK) {
-				mvaddch(y + 1, x, CHR_BOMBPK);
-			}
-			if (map[y][x] == MAP_MONSTER) {
-				mvaddch(y + 1, x, CHR_MONSTER);
-			}
-		}
-	}
-}
-
-int save_map(char* filename) {
-	curs_set(0);
-
-	FILE* fp = fopen(filename, "w");
-	if (fp == NULL) {
-		msgbox("ERROR: Unable to open file for writing!");
-		curs_set(1);
-		return 1;
-	}
-
-	for (int y = 0; y < MAP_YSIZE; y++) {
-		for (int x = 0; x < MAP_XSIZE; x++) {
-			fputc(map[y][x], fp);
-		}
-	}
-
-	msgbox("Saved successfully!");
-
-	fclose(fp);
-	curs_set(1);
-
-	return 0;
-}
-
-int count_object(int object) {
-	int rval = 0;
-
-	for (int y = 0; y < MAP_YSIZE; y++) {
-		for (int x = 0; x < MAP_XSIZE; x++) {
-			if (map[y][x] == object) {
-				rval++;
-			}
-		}
-	}
-
-	return rval;
 }
 
 void editor_draw_status(void) {
@@ -400,9 +327,9 @@ void editor_draw_status(void) {
 	}
 
 	attrset(COLOR_PAIR(COLOR_MAGENTA));
-	mvprintw(0, 0, "*: %d $: %d SCORE: %d   ", count_object(MAP_DIAMOND),
-	         count_object(MAP_MONEY), (count_object(MAP_DIAMOND) * POINTS_DIAMOND) +
-	         (count_object(MAP_MONEY) * POINTS_MONEY));
+	mvprintw(0, 0, "*: %d $: %d SCORE: %d   ", count_map_objects(MAP_DIAMOND),
+	         count_map_objects(MAP_MONEY), (count_map_objects(MAP_DIAMOND) * POINTS_DIAMOND) +
+	         (count_map_objects(MAP_MONEY) * POINTS_MONEY));
 
 	attrset(A_NORMAL);
 }
