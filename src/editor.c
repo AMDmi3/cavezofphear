@@ -249,57 +249,57 @@ void editor_draw_status(void) {
 
 	switch (last_obj) {
 	case MAP_EMPTY:
-		mvaddch(0, 68, CHR_EMPTY);
+		mvaddch(0, 68, get_map_symbol(last_obj));
 		attrset(COLOR_PAIR(COLOR_WHITE) | A_NORMAL);
 		mvprintw(24, 2, "EMPTY");
 		mvaddch(24, 0, '0' | COLOR_PAIR(COLOR_WHITE) | A_BOLD);
 		break;
 
 	case MAP_DIRT:
-		mvaddch(0, 68, CHR_DIRT);
-		mvaddch(24, 11, CHR_DIRT);
+		mvaddch(0, 68, get_map_symbol(last_obj));
+		mvaddch(24, 11, get_map_symbol(last_obj));
 		mvaddch(24, 9, '1' | COLOR_PAIR(COLOR_WHITE) | A_BOLD);
 		break;
 
 	case MAP_WALL:
-		mvaddch(0, 68, CHR_WALL);
-		mvaddch(24, 26, CHR_WALL);
+		mvaddch(0, 68, get_map_symbol(last_obj));
+		mvaddch(24, 26, get_map_symbol(last_obj));
 		mvaddch(24, 24, '4' | COLOR_PAIR(COLOR_WHITE) | A_BOLD);
 		break;
 
 	case MAP_STONE:
-		mvaddch(0, 68, CHR_STONE);
-		mvaddch(24, 16, CHR_STONE);
+		mvaddch(0, 68, get_map_symbol(last_obj));
+		mvaddch(24, 16, get_map_symbol(last_obj));
 		mvaddch(24, 14, '2' | COLOR_PAIR(COLOR_WHITE) | A_BOLD);
 		break;
 
 	case MAP_DIAMOND:
-		mvaddch(0, 68, CHR_DIAMOND);
-		mvaddch(24, 21, CHR_DIAMOND);
+		mvaddch(0, 68, get_map_symbol(last_obj));
+		mvaddch(24, 21, get_map_symbol(last_obj));
 		mvaddch(24, 19, '3' | COLOR_PAIR(COLOR_WHITE) | A_BOLD);
 		break;
 
 	case MAP_MONEY:
-		mvaddch(0, 68, CHR_MONEY);
-		mvaddch(24, 31, CHR_MONEY);
+		mvaddch(0, 68, get_map_symbol(last_obj));
+		mvaddch(24, 31, get_map_symbol(last_obj));
 		mvaddch(24, 29, '5' | COLOR_PAIR(COLOR_WHITE) | A_BOLD);
 		break;
 
 	case MAP_BOMBPK:
-		mvaddch(0, 68, CHR_BOMBPK);
-		mvaddch(24, 36, CHR_BOMBPK);
+		mvaddch(0, 68, get_map_symbol(last_obj));
+		mvaddch(24, 36, get_map_symbol(last_obj));
 		mvaddch(24, 34, '6' | COLOR_PAIR(COLOR_WHITE) | A_BOLD);
 		break;
 
 	case MAP_MONSTER:
-		mvaddch(0, 68, CHR_MONSTER);
-		mvaddch(24, 41, CHR_MONSTER);
+		mvaddch(0, 68, get_map_symbol(last_obj));
+		mvaddch(24, 41, get_map_symbol(last_obj));
 		mvaddch(24, 39, '7' | COLOR_PAIR(COLOR_WHITE) | A_BOLD);
 		break;
 
 	case MAP_PLAYER:
 		exit(0);
-		mvaddch(24, 36, CHR_PLAYER);
+		mvaddch(24, 36, get_map_symbol(last_obj));
 		break;
 	}
 

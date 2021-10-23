@@ -32,19 +32,9 @@
 #define MAP_BOMBPK  7
 #define MAP_MONSTER 8
 
-#define CHR_EMPTY   ' '
-#define CHR_DIRT    '#' | COLOR_PAIR(COLOR_RED)    | A_NORMAL
-#define CHR_STONE   'O' | COLOR_PAIR(COLOR_WHITE)  | A_NORMAL
-#define CHR_WALL    ':' | COLOR_PAIR(COLOR_CYAN)   | A_NORMAL
-#define CHR_DIAMOND '*' | COLOR_PAIR(COLOR_YELLOW) | A_BOLD
-#define CHR_MONEY   '$' | COLOR_PAIR(COLOR_GREEN)  | A_NORMAL
-#define CHR_PLAYER  'Z' | COLOR_PAIR(COLOR_WHITE)  | A_BOLD
-#define CHR_BOMB    '@' | COLOR_PAIR(COLOR_BLUE)   | A_BOLD
-#define CHR_BOMBPK  '%' | COLOR_PAIR(COLOR_BLUE)   | A_BOLD
-#define CHR_MONSTER 'M' | COLOR_PAIR(COLOR_MAGENTA)| A_BOLD
-
 extern char map[MAP_YSIZE][MAP_XSIZE];
 
+int get_map_symbol(int object_type);
 void draw_map(void);
 
 void clear_map(void);
