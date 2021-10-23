@@ -47,6 +47,7 @@ extern char map[MAP_YSIZE][MAP_XSIZE];
 
 void draw_map(void);
 
+void clear_map(void);
 int load_map(const char* path);
 int save_map(const char* path);
 

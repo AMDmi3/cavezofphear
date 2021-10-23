@@ -41,10 +41,8 @@ int editor_main(const char* file) {
 		exit(1);
 	}
 
-	for (int y = 0; y < MAP_YSIZE; y++) {
-		for (int x = 0; x < MAP_XSIZE; x++) {
-			map[y][x] = 0;
-		}
+	if (load_map(file)) {
+		clear_map();
 	}
 
 	curses_start();
@@ -56,12 +54,6 @@ int editor_main(const char* file) {
 
 	signal(SIGINT, sigint_handler);
 	signal(SIGWINCH, sigwinch_handler);
-
-	FILE* fp = fopen(file, "r");
-	if (fp != NULL) {
-		fclose(fp);
-		load_map(file);
-	}
 
 	for (int x = 0; x < MAP_XSIZE; x++) {
 		map[0][x] = MAP_WALL;

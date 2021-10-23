@@ -19,16 +19,24 @@
 
 #include <stdio.h>
 
+void clear_map(void) {
+	for (int y = 0; y < MAP_YSIZE; y++) {
+		for (int x = 0; x < MAP_XSIZE; x++) {
+			map[y][x] = MAP_EMPTY;
+		}
+	}
+}
+
 int load_map(const char* filename) {
 	FILE* fp = fopen(filename, "r");
 	if (fp == NULL) {
 		return 1;
 	}
 
+	clear_map();
+
 	for (int y = 0; y < MAP_YSIZE; y++) {
 		for (int x = 0; x < MAP_XSIZE; x++) {
-			map[y][x] = 0;
-
 			int c = fgetc(fp);
 			if (c == EOF) {
 				fclose(fp);
