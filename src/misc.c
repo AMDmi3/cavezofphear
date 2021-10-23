@@ -17,7 +17,6 @@
 
 #include "misc.h"
 #include "map/map.h"  // XXX: untie from map, use window size instead
-#include "common.h"
 
 #include <ncurses.h>
 #include <string.h>

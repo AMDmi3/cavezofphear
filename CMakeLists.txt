@@ -14,7 +14,6 @@ include(GNUInstallDirs)
 # sources
 set(PHEAR_HEADERS
 	src/chk.h
-	src/common.h
 	src/editor.h
 	src/frame.h
 	src/game.h

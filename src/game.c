@@ -18,9 +18,9 @@
 #include "game.h"
 
 #include "chk.h"
-#include "common.h"
 #include "editor.h"
 #include "frame.h"
+#include "game/rules.h"
 #include "isready.h"
 #include "map/map.h"
 #include "misc.h"

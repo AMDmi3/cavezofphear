@@ -17,9 +17,9 @@
 
 #include "editor.h"
 
-#include "common.h"
 #include "frame.h"
 #include "map/map.h"
+#include "game/rules.h"
 #include "misc.h"
 
 #include <ncurses.h>

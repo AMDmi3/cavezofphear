@@ -18,10 +18,6 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-#ifndef VERSION
-#error VERSION is expected to be defined by the build system
-#endif
-
 #define POINTS_DIAMOND   10
 #define POINTS_MONEY     100
 
