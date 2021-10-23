@@ -236,7 +236,7 @@ void editor_draw_status(void) {
 	mvprintw(0, calc_center(strlen("CAVEZ of PHEAR " VERSION " EDITOR")), "CAVEZ of PHEAR " VERSION " EDITOR");
 
 	attrset(COLOR_PAIR(COLOR_MAGENTA));
-	mvprintw(24, 0, "0 EMPTY  1 #  2 O  3 *  4 :  5 $  6 @  7 M  9 Z     l LOCK ON/OFF s SAVE  q QUIT");
+	mvprintw(24, 0, "0 EMPTY  1 #  2 O  3 *  4 :  5 $  6 %%  7 M  9 Z     l LOCK ON/OFF s SAVE  q QUIT");
 /* mvaddch(24, 13, CHR_DIRT);
  * mvaddch(24, 18, CHR_STONE);
  * mvaddch(24, 23, CHR_DIAMOND);
