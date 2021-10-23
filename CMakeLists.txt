@@ -17,6 +17,7 @@ set(PHEAR_HEADERS
 	src/common.h
 	src/editor.h
 	src/frame.h
+	src/game.h
 	src/gplot.h
 	src/isready.h
 	src/map/map.h
@@ -28,6 +29,7 @@ set(PHEAR_SOURCES
 	src/chk.c
 	src/editor.c
 	src/frame.c
+	src/game.c
 	src/gplot.c
 	src/isready.c
 	src/main.c

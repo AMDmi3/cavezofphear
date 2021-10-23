@@ -15,34 +15,9 @@
     see http://www.gnu.org/licenses/.
  */
 
-#include "editor.h"
-#include "game.h"
+#ifndef GAME_H
+#define GAME_H
 
-#include <stdio.h>
-#include <getopt.h>
+int game_main(const char* custom_map_path);
 
-int main(int argc, char** argv) {
-	int c;
-
-	while ((c = getopt(argc, argv, "e:vh")) != -1) {
-		switch (c) {
-		case 'e':
-			if (!optarg) {
-				fprintf(stderr, "usage: phear -e <file>\n");
-				return 1;
-			}
-			return editor_main(optarg);
-			break;
-		case 'v':
-			puts(VERSION);
-			return 0;
-		case 'h':
-			puts("phear [-e] [-v] [-h] [<file>]\n");
-			return 0;
-		default:
-			return 1;
-		}
-	}
-
-	return game_main(argv[optind]);
-}
+#endif
