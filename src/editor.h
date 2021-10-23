@@ -18,6 +18,6 @@
 #ifndef EDITOR_H
 #define EDITOR_H
 
-int editor_main(char* file);
+int editor_main(const char* file);
 
 #endif

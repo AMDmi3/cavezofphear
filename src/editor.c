@@ -35,7 +35,7 @@ int last_obj;
 
 void editor_draw_status(void);
 
-int editor_main(char* file) {
+int editor_main(const char* file) {
 	if (!file) {
 		fprintf(stderr, "usage: phear -e <file>\n");
 		exit(1);
