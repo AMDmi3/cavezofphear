@@ -447,7 +447,7 @@ void create_map(void) {
 		snprintf(mstr, sizeof mstr, "%s/levels/%02d", get_data_dir(), level);
 	}
 
-	if (load_map(mstr) == 1) {
+	if (!load_map(mstr)) {
 		bail("error: load_map failed");
 	}
 

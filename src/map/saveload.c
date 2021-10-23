@@ -30,7 +30,7 @@ void clear_map(void) {
 int load_map(const char* filename) {
 	FILE* fp = fopen(filename, "r");
 	if (fp == NULL) {
-		return 1;
+		return 0;
 	}
 
 	clear_map();
@@ -40,7 +40,7 @@ int load_map(const char* filename) {
 			int c = fgetc(fp);
 			if (c == EOF) {
 				fclose(fp);
-				return 1;
+				return 0;
 			}
 
 			map[y][x] = c;
@@ -49,13 +49,13 @@ int load_map(const char* filename) {
 
 	fclose(fp);
 
-	return 0;
+	return 1;
 }
 
 int save_map(const char* filename) {
 	FILE* fp = fopen(filename, "w");
 	if (fp == NULL) {
-		return 1;
+		return 0;
 	}
 
 	for (int y = 0; y < MAP_YSIZE; y++) {
@@ -66,5 +66,5 @@ int save_map(const char* filename) {
 
 	fclose(fp);
 
-	return 0;
+	return 1;
 }

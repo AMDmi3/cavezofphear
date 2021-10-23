@@ -41,7 +41,7 @@ int editor_main(const char* file) {
 		exit(1);
 	}
 
-	if (load_map(file)) {
+	if (!load_map(file)) {
 		clear_map();
 	}
 
@@ -185,7 +185,7 @@ int editor_main(const char* file) {
 		if (tolower(input) == 's') {
 			beep();
 			curs_set(0);
-			if (save_map(file) == 1) {
+			if (!save_map(file)) {
 				msgbox("ERROR: Unable to open file for writing!");
 			} else {
 				msgbox("Saved successfully!");
