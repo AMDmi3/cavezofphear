@@ -36,6 +36,9 @@
 
 #define UPDATE_DELAY 2000000
 
+#define EX_C CHR_DIAMOND
+#define EX_DELAY 50000
+
 char item_behind_player;
 const char* custom_map = NULL;
 int p_x;

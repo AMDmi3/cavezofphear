@@ -25,7 +25,4 @@
 #define POINTS_DIAMOND   10
 #define POINTS_MONEY     100
 
-#define EX_C CHR_DIAMOND
-#define EX_DELAY 50000
-
 #endif
