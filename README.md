@@ -40,7 +40,7 @@ To run the game without installing:
 
 ```sh
 cmake .
-make
+cmake --build .
 ./phear
 ```
 
@@ -48,8 +48,8 @@ For systemwide installation:
 
 ```sh
 cmake -DSYSTEMWIDE=ON .
-make
-make install
+cmake --build .
+cmake --install .
 ```
 
 ## Editor
