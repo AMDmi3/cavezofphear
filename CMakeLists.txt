@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 # meta
-project(cavezofphear VERSION 0.6.0)
+project(cavezofphear VERSION 0.6.1)
 
 # options
 option(SYSTEMWIDE "Build for systemwide installation" OFF)
@@ -62,10 +62,11 @@ endif()
 
 if(WITH_MANPAGE)
 	add_custom_command(
-		OUTPUT phear.1
+		OUTPUT phear.6
 		COMMAND
 			${HELP2MAN}
-				--output=phear.1
+				--output=phear.6
+				--section=6
 				--no-info
 				--name="Boulder Dash / Digger-like game for consoles/terminals"
 				--include ${CMAKE_CURRENT_SOURCE_DIR}/doc/include.help2man
@@ -77,7 +78,7 @@ if(WITH_MANPAGE)
 		COMMENT "Generating manual page"
 	)
 
-	add_custom_target(man ALL DEPENDS phear.1)
+	add_custom_target(man ALL DEPENDS phear.6)
 endif()
 
 # install
@@ -86,6 +87,6 @@ if(SYSTEMWIDE)
 	install(DIRECTORY data DESTINATION ${CMAKE_INSTALL_DATADIR}/phear)
 
 	if(WITH_MANPAGE)
-		install(FILES ${CMAKE_CURRENT_BINARY_DIR}/phear.1 DESTINATION ${CMAKE_INSTALL_MANDIR}/man1)
+		install(FILES ${CMAKE_CURRENT_BINARY_DIR}/phear.6 DESTINATION ${CMAKE_INSTALL_MANDIR}/man6)
 	endif()
 endif()
