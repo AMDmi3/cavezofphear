@@ -1,3 +1,7 @@
+## CAVEZ of PHEAR 0.6.0 (2021-12-15)
+- Added a manpage.
+- Fixed some typos in documentation.
+
 ## CAVEZ of PHEAR 0.5.3 (2021-10-22)
 - Source code cleanup.
 
