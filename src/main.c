@@ -35,8 +35,8 @@ void usage(const char* progname, FILE* fd) {
 	fprintf(
 		fd,
 		/* 70 chars                                                         */
-		"Usage: %1$s [--version] [--help] [MAPFILE]\n"
-		"   or: %1$s --edit MAPFILE\n"
+		"Usage: %s [--version] [--help] [MAPFILE]\n"
+		"   or: %s --edit MAPFILE\n"
 		"\n"
 		"You are trapped in the CAVEZ of PHEAR, your mission is to escape\n"
 		"through all the caves and make it out alive. To escape through a\n"
@@ -50,7 +50,7 @@ void usage(const char* progname, FILE* fd) {
 		"  -e, --edit     run level editor on the specified file\n"
 		"\n"
 		/* 70 chars                                                         */
-		, progname
+		, progname, progname
 	);
 }
 
