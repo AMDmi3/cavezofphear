@@ -8,7 +8,7 @@
 ## CAVEZ of PHEAR 0.5.2 (2021-10-22)
 - Adopted by new maintainer Dmitry Marakasov.
 - Switched to CMake build system.
-- Updateed documentation and convert to markdown.
+- Updated documentation and converted to markdown.
 - Fixed C warnings.
 
 ## CAVEZ of PHEAR 0.5.1 (2011-11-30)
