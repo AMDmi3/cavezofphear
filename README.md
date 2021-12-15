@@ -55,8 +55,8 @@ cmake --install .
 ## Editor
 
 Start the editor with `phear -e <map>`, use `0-9` keys to place
-objects, `s` to save the map, `q` to quit and `l` to elabme lock-mode
-(lets you traw using arrow-keys). Play your map with `phear <map>`.
+objects, `s` to save the map, `q` to quit and `l` to enable lock-mode
+(lets you draw using arrow-keys). Play your map with `phear <map>`.
 
 ## History and credits
 
