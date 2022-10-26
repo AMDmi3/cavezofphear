@@ -9,7 +9,7 @@ jobs:
           - { cc: gcc }
           - { cc: clang }
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up environment
         run: |
           echo 'CC=${{ matrix.cc }}' >> $GITHUB_ENV
