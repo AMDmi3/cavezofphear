@@ -60,12 +60,12 @@ void bail(const char* message) {
 	exit(EXIT_FAILURE);
 }
 
-void sigint_handler() {
+void sigint_handler(int arg) {
 	curses_stop();
 	bail("got SIGINT, cleaning up");
 }
 
-void sigwinch_handler() {
+void sigwinch_handler(int arg) {
 	/*
 	   curses_stop();
 	   bail("got SIGWINCH, cleaning up");
