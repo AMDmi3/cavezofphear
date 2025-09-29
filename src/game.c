@@ -627,7 +627,7 @@ void draw_status(void) {
 	attrset(COLOR_PAIR(COLOR_MAGENTA) | A_BOLD);
 	mvprintw(24, 0, "SCORE:");
 	attrset(COLOR_PAIR(COLOR_WHITE) | A_BOLD);
-	mvprintw(24, 7, "%d", score);
+	mvprintw(24, 7, "%ld", score);
 
 	attrset(COLOR_PAIR(COLOR_MAGENTA) | A_BOLD);
 	mvprintw(24, 36, "BOMBS:");
