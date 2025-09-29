@@ -21,7 +21,7 @@
 void curses_start(void);
 void curses_stop(void);
 void bail(const char* message);
-void sigint_handler(int arg);
-void sigwinch_handler(int arg);
+void sigint_handler(int);
+void sigwinch_handler(int);
 
 #endif
