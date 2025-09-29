@@ -20,8 +20,10 @@ jobs:
           echo 'CFLAGS=-Werror -Wall -Wextra -pedantic' >> $GITHUB_ENV
       - name: Install dependencies
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install help2man
+          echo 'set man-db/auto-update false' | sudo debconf-communicate >/dev/null
+          sudo dpkg-reconfigure man-db
+          sudo apt update -qq
+          sudo apt install help2man
       - name: Configure
         run: cmake . -DCMAKE_VERBOSE_MAKEFILE=yes -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Debug -DSYSTEMWIDE=yes
       - name: Build
