@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-const char* get_data_dir() {
+const char* get_data_dir(void) {
 	if (!chk_file(DATADIR "/data/", "spgraf")) {
 		return DATADIR "/data/";
 	}
