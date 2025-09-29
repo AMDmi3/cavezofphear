@@ -15,6 +15,9 @@ endif()
 
 include(GNUInstallDirs)
 
+# global flags
+set(CMAKE_C_STANDARD 23)
+
 # sources
 set(PHEAR_HEADERS
 	src/chk.h
