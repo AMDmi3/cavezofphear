@@ -1,3 +1,6 @@
+## CAVEZ of PHEAR 0.6.2 (2025-09-29)
+- Fixed C warnings and errors with newer compilers.
+
 ## CAVEZ of PHEAR 0.6.1 (2021-12-15)
 - Fixed manpage category.
 
